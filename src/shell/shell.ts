@@ -3,6 +3,8 @@ import {customElement} from 'lit/decorators.js';
 import {SignalWatcher, signal} from '@lit-labs/signals';
 import {SignalArray} from 'signal-utils/array';
 import 'https://early.webawesome.com/webawesome@3.0.0-alpha.7/dist/components/switch/switch.js';
+import 'https://early.webawesome.com/webawesome@3.0.0-alpha.7/dist/components/page/page.js';
+import 'https://early.webawesome.com/webawesome@3.0.0-alpha.7/dist/components/card/card.js';
 
 const count = signal(0);
 
@@ -24,9 +26,22 @@ export class EfsShell extends SignalWatcher(LitElement) {
 
   render() {
     return html`
-      <p>The count is ${count.get()}</p>
-      <button @click=${this.#onClick}>Increment</button>
-      <wa-switch ?checked=${this.isDarkScheme} @wa-change=${this.#switchClick}>Dark mode</wa-switch>
+      <wa-page mobile-breakpoint="50ch">
+        <div slot=navigation>Navigation</div>
+        <header slot=header>
+          Header
+          <wa-switch ?checked=${this.isDarkScheme} @wa-change=${this.#switchClick}>Dark mode</wa-switch>
+        </header>
+        <header slot=main-header>Main header</header>
+
+        <main>
+          <wa-card class="card-basic">
+            <p>The count is ${count.get()}</p>
+            <button @click=${this.#onClick}>Increment</button>
+          </wa-card>
+        </main>
+
+      </wa-page>
     `;
   }
 
