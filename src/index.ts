@@ -14,8 +14,8 @@ function init() {
 // Function to set the class based on the user's color scheme preference
 function updateColorScheme() {
     const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    document.body.classList.toggle('wa-theme-default-dark', prefersDarkScheme);
-    document.body.classList.toggle('wa-theme-default-light', !prefersDarkScheme);
+    document.documentElement.classList.toggle('wa-theme-default-dark', prefersDarkScheme);
+    document.documentElement.classList.toggle('wa-theme-default-light', !prefersDarkScheme);
 }
 
 function route() {
