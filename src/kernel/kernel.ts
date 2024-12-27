@@ -1,3 +1,7 @@
+
+
+import { EfsShell } from '../shell/shell.js';
+
 console.log('index.ts ran');
 
 function init() {
@@ -9,6 +13,8 @@ function init() {
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateColorScheme);
 
     route();
+
+    document.body.appendChild(new EfsShell());
 }
 
 // Function to set the class based on the user's color scheme preference

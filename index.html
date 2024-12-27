@@ -5,19 +5,16 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>EFS prototype via Vite + Lit + TS</title>
-    <link rel="stylesheet" href="./src/index.css" />
-    <script type="module" src="/src/index.ts"></script>
 
     <!-- Web Awesome autoloader -->
     <link rel="stylesheet" href="https://early.webawesome.com/webawesome@3.0.0-alpha.7/dist/styles/themes/default.css" />
-    <script type="module" src="https://early.webawesome.com/webawesome@3.0.0-alpha.7/dist/webawesome.loader.js"></script>
+    <!-- <script type="module" src="https://early.webawesome.com/webawesome@3.0.0-alpha.7/dist/webawesome.loader.js"></script> -->
     
     <!-- Web Awesome native styles -->
-    <!-- <link rel="stylesheet" href="https://early.webawesome.com/webawesome@3.0.0-alpha.7/dist/styles/webawesome.css" /> -->
+    <link rel="stylesheet" href="https://early.webawesome.com/webawesome@3.0.0-alpha.7/dist/styles/webawesome.css" />
 
     <script type="module">
-      import { init } from '/src/index.ts';
-      import { EfsShell } from '/src/shell/shell.ts';
+      import { init } from '/src/kernel/kernel.ts';
 
       document.addEventListener('DOMContentLoaded', () => {
         init();
@@ -26,70 +23,6 @@
 
   </head>
   <body>
-    
-    <efs-shell></efs-shell>
-    <!-- <wa-page>
-      <header slot="header" class="wa-split">
-        <div class="wa-cluster">
-          <wa-breadcrumb style="font-size: var(--wa-font-size-s);">
-            <wa-breadcrumb-item>Sepolia</wa-breadcrumb-item>
-            <wa-breadcrumb-item>images</wa-breadcrumb-item>
-            <wa-breadcrumb-item>food</wa-breadcrumb-item>
-          </wa-breadcrumb>
-          <wa-input id="search" placeholder="Search" size="small" style="max-inline-size: 12rem;">
-            <wa-icon slot="prefix" name="magnifying-glass"></wa-icon>
-          </wa-input>
-        </div>
-        <div class="wa-cluster wa-gap-xs">
-          <wa-button size="small" variant="brand">EFS</wa-button>
-        </div>
-      </header>
-      <nav slot="navigation-header">
-        <div class="wa-flank">
-          <wa-avatar image="https://images.unsplash.com/photo-1544648720-132573cb590d?q=20" label=""></wa-avatar>
-          <div class="wa-stack wa-gap-3xs">
-            <span class="wa-heading-s">View Settings</span>
-            <span class="wa-caption-s" lang="la"><em>Bubo virginianus</em></span>
-          </div>
-        </div>
-      </nav>
-      <nav slot="navigation">
-        <a href="#identification">Identification</a>
-        <a href="#range">Range and Habitat</a>
-        <a href="#behavior">Behavior</a>
-        <a href="#conservation">Conservation</a>
-      </nav>
-      <header slot="main-header">
-        <div>
-            <h1>/images/food/</h1>
-        </div>
-      </header>
-      <main class="wa-body-l">
-        <div class="skeleton-paragraphs">
-          <wa-skeleton></wa-skeleton>
-          <wa-skeleton></wa-skeleton>
-          <wa-skeleton></wa-skeleton>
-          <wa-skeleton></wa-skeleton>
-          <wa-skeleton></wa-skeleton>
-        </div>
-        <style>
-          .skeleton-paragraphs wa-skeleton {
-            margin-bottom: 1rem;
-          }
-        
-          .skeleton-paragraphs wa-skeleton:nth-child(2) {
-            width: 95%;
-          }
-        
-          .skeleton-paragraphs wa-skeleton:nth-child(4) {
-            width: 90%;
-          }
-        
-          .skeleton-paragraphs wa-skeleton:last-child {
-            width: 50%;
-          }
-        </style>
-      </main>
-    </wa-page> -->
-  </body>
+    <noscript>JavaScript is required for EFS to run</noscript>
+</body>
 </html>
