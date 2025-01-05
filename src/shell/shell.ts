@@ -31,9 +31,9 @@ export class EfsShell extends SignalWatcher(LitElement) {
           <efs-topic-breadcrumb></efs-topic-breadcrumb>
           <wa-switch ?checked=${this.isDarkScheme} @wa-change=${this.#switchClick}>Dark mode</wa-switch>
         </header>
-        <header slot=main-header>Main header</header>
+        <header slot=main-header>EFS Browser (main-header)</header>
         <div slot=navigation>
-          Topic tree (Navigation)
+          Topic Tree (navigation)
           <efs-topic-tree></efs-topic-tree>
         </div>
         <main>
