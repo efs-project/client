@@ -48,11 +48,6 @@ export class EfsShell extends SignalWatcher(LitElement) {
   #onClick() {
     count.set(count.get() + 1);
   }
-  
-  #switchClick(event: Event) {
-    const target = event.target as HTMLInputElement;
-    this.#setColorScheme(target.checked);
-  }
 
   /* Theme handling */
   private isDarkScheme: boolean = false;
@@ -69,5 +64,10 @@ export class EfsShell extends SignalWatcher(LitElement) {
     
     document.documentElement.classList.toggle('wa-theme-default-dark', isDarkMode);
     document.documentElement.classList.toggle('wa-theme-default-light', !isDarkMode);
+  }
+
+  #switchClick(event: Event) {
+    const target = event.target as HTMLInputElement;
+    this.#setColorScheme(target.checked);
   }
 }
