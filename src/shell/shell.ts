@@ -3,6 +3,7 @@ import {customElement} from 'lit/decorators.js';
 import {SignalWatcher, signal} from '@lit-labs/signals';
 import {SignalArray} from 'signal-utils/array';
 import './topic-tree.js';
+import './topic-breadcrumb.js';
 import 'https://early.webawesome.com/webawesome@3.0.0-alpha.7/dist/components/switch/switch.js';
 import 'https://early.webawesome.com/webawesome@3.0.0-alpha.7/dist/components/page/page.js';
 import 'https://early.webawesome.com/webawesome@3.0.0-alpha.7/dist/components/card/card.js';
@@ -12,9 +13,6 @@ const count = signal(0);
 @customElement('efs-shell')
 export class EfsShell extends SignalWatcher(LitElement) {
   static styles = css`
-    :host {
-      display: block;
-    }
   `;
   
   constructor() {
@@ -28,16 +26,16 @@ export class EfsShell extends SignalWatcher(LitElement) {
   render() {
     return html`
       <wa-page mobile-breakpoint="50ch">
+        <header slot=header>
+          <!-- Topic breadcrumbs (Header) -->
+          <efs-topic-breadcrumb></efs-topic-breadcrumb>
+          <wa-switch ?checked=${this.isDarkScheme} @wa-change=${this.#switchClick}>Dark mode</wa-switch>
+        </header>
+        <header slot=main-header>Main header</header>
         <div slot=navigation>
           Topic tree (Navigation)
           <efs-topic-tree></efs-topic-tree>
         </div>
-        <header slot=header>
-          Topic breadcrumbs (Header)
-          <wa-switch ?checked=${this.isDarkScheme} @wa-change=${this.#switchClick}>Dark mode</wa-switch>
-        </header>
-        <header slot=main-header>Main header</header>
-
         <main>
           <wa-card class="card-basic">
             <p>The count is ${count.get()}</p>

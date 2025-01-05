@@ -6,9 +6,6 @@ import 'https://early.webawesome.com/webawesome@3.0.0-alpha.7/dist/components/tr
 @customElement('efs-topic-tree')
 export class EfsTopicTree extends SignalWatcher(LitElement) {
   static styles = css`
-    :host {
-      display: block;
-    }
   `;
 
   private treeData = [
