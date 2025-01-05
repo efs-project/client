@@ -1,14 +1,12 @@
 import {LitElement, html, css} from 'lit';
 import {customElement} from 'lit/decorators.js';
-import {SignalWatcher, signal} from '@lit-labs/signals';
+import {SignalWatcher} from '@lit-labs/signals';
 import {SignalArray} from 'signal-utils/array';
 import './topic-tree.js';
 import './topic-breadcrumb.js';
+import '../apps/browser/browser.js';
 import 'https://early.webawesome.com/webawesome@3.0.0-alpha.7/dist/components/switch/switch.js';
 import 'https://early.webawesome.com/webawesome@3.0.0-alpha.7/dist/components/page/page.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.7/dist/components/card/card.js';
-
-const count = signal(0);
 
 @customElement('efs-shell')
 export class EfsShell extends SignalWatcher(LitElement) {
@@ -37,18 +35,11 @@ export class EfsShell extends SignalWatcher(LitElement) {
           <efs-topic-tree></efs-topic-tree>
         </div>
         <main>
-          <wa-card class="card-basic">
-            <p>The count is ${count.get()}</p>
-            <button @click=${this.#onClick}>Increment</button>
-          </wa-card>
+          <efs-browser></efs-browser>
         </main>
 
       </wa-page>
     `;
-  }
-
-  #onClick() {
-    count.set(count.get() + 1);
   }
 
   /* Theme handling */
