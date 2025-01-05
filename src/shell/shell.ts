@@ -2,6 +2,7 @@ import {LitElement, html, css} from 'lit';
 import {customElement} from 'lit/decorators.js';
 import {SignalWatcher, signal} from '@lit-labs/signals';
 import {SignalArray} from 'signal-utils/array';
+import './topic-tree.js';
 import 'https://early.webawesome.com/webawesome@3.0.0-alpha.7/dist/components/switch/switch.js';
 import 'https://early.webawesome.com/webawesome@3.0.0-alpha.7/dist/components/page/page.js';
 import 'https://early.webawesome.com/webawesome@3.0.0-alpha.7/dist/components/card/card.js';
@@ -27,9 +28,12 @@ export class EfsShell extends SignalWatcher(LitElement) {
   render() {
     return html`
       <wa-page mobile-breakpoint="50ch">
-        <div slot=navigation>Navigation</div>
+        <div slot=navigation>
+          Topic tree (Navigation)
+          <efs-topic-tree></efs-topic-tree>
+        </div>
         <header slot=header>
-          Header
+          Topic breadcrumbs (Header)
           <wa-switch ?checked=${this.isDarkScheme} @wa-change=${this.#switchClick}>Dark mode</wa-switch>
         </header>
         <header slot=main-header>Main header</header>
