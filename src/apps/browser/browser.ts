@@ -7,6 +7,13 @@ import 'https://early.webawesome.com/webawesome@3.0.0-alpha.10/dist/components/c
 import { getAttestation } from '../../libefs/eas.ts';
 //import { isAttestationIndexed, getReferencingAttestationUIDs, getReferencingAttestationUIDCount } from '../../libefs/efs.ts'
 import * as efs from '../../libefs/efs.ts'
+import { Attestation } from '@ethereum-attestation-service/eas-sdk';
+
+interface AttestationNode {
+  uid: string;
+  data: Attestation;  // Replace with proper type from EAS when available
+  children: AttestationNode[];
+}
 
 const count = signal(0);
 
@@ -47,34 +54,40 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
 
         const uid = "0x6e4851b1ee4ee826a06a4514895640816b4143bf2408c33e5c1263275daf53ce";
         const schema = "0xddc07ff085923cb9a3c58bf684344b7672881e5a004044e3e99527861fed6435";
-
-
-
-        await this.#traverseAttestations(uid, schema);
+        
+        const attestationTree = await this.#traverseAttestations(uid, schema);
+        // fixme console.log('Attestation tree:', JSON.stringify(attestationTree, null, 2));
     }
     
-    async #traverseAttestations(uid: string, schema: string, depth: number = 0) {
-        console.log('Depth:', depth, 'Processing attestation:', uid);
-        
-        // Get the attestation data
-        await getAttestation(uid);
-        
-        // Check if it's indexed and get references
-        const isIndexed = await efs.isAttestationIndexed(uid);
-        if (!isIndexed) {
-            console.log('Attestation not indexed:', uid);
-            return;
-        }
-    
-        // Get and process references
-        const refUIDs = await efs.getReferencingAttestationUIDs(uid, schema);
-        console.log('Found', refUIDs.length, 'references at depth', depth);
-    
-        // Recursively process each reference
-        for (const ref of refUIDs) {
-            await this.#traverseAttestations(ref, schema, depth + 1);
-        }
-    }
+    async #traverseAttestations(uid: string, schema: string, depth: number = 0): Promise<AttestationNode> {
+      console.log('Depth:', depth, 'Processing attestation:', uid);
+      
+      // Create the node for this attestation
+      const node: AttestationNode = {
+          uid: uid,
+          data: await getAttestation(uid),
+          children: []
+      };
+      
+      // Check if it's indexed and get references
+      const isIndexed = await efs.isAttestationIndexed(uid);
+      if (!isIndexed) {
+          console.log('Attestation not indexed:', uid);
+          return node;
+      }
+  
+      // Get and process references
+      const refUIDs = await efs.getReferencingAttestationUIDs(uid, schema);
+      console.log('Found', refUIDs.length, 'references at depth', depth);
+  
+      // Recursively process each reference and add to children
+      for (const ref of refUIDs) {
+          const child = await this.#traverseAttestations(ref, schema, depth + 1);
+          node.children.push(child);
+      }
+  
+      return node;
+  }
   }
 
 
