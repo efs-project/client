@@ -4,15 +4,15 @@ import { SignalWatcher, signal } from '@lit-labs/signals';
 import 'https://early.webawesome.com/webawesome@3.0.0-alpha.10/dist/components/card/card.js';
 
 //import { client, ethersProvider } from '../../kernel/wallet.ts';
-import { getAttestation } from '../../libefs/eas.ts';
+import * as eas from '../../libefs/eas.ts';
 //import { isAttestationIndexed, getReferencingAttestationUIDs, getReferencingAttestationUIDCount } from '../../libefs/efs.ts'
 import * as efs from '../../libefs/efs.ts'
 import { Attestation } from '@ethereum-attestation-service/eas-sdk';
 
-interface AttestationNode {
+interface Topic {
   uid: string;
-  data: Attestation;  // Replace with proper type from EAS when available
-  children: AttestationNode[];
+  topic: string;
+  children: Topic[];
 }
 
 const count = signal(0);
@@ -52,57 +52,60 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
     //   getAttestation(ref);
     // });
 
-        const uid = "0x6e4851b1ee4ee826a06a4514895640816b4143bf2408c33e5c1263275daf53ce";
-        const schema = "0xddc07ff085923cb9a3c58bf684344b7672881e5a004044e3e99527861fed6435";
-        
-        const attestationTree = await this.#traverseAttestations(uid, schema);
-        //console.log('Attestation tree:', this.stringifyWithBigInt(attestationTree));
-        console.table(attestationTree);
-    }
+    const uid = "0x6e4851b1ee4ee826a06a4514895640816b4143bf2408c33e5c1263275daf53ce";
+    const schema = "0xddc07ff085923cb9a3c58bf684344b7672881e5a004044e3e99527861fed6435";
 
-    private stringifyWithBigInt(obj: any): string {
-      return JSON.stringify(obj, (key, value) => {
-          if (typeof value === 'bigint') {
-              return value.toString();
-          }
-          return value;
-      }, 2);
+    const attestationTree = await this.#traverseAttestations(uid, schema);
+    console.log('Attestation tree:', this.stringifyWithBigInt(attestationTree));
+    //console.table(attestationTree);
   }
-    
-    async #traverseAttestations(uid: string, schema: string, depth: number = 0): Promise<AttestationNode> {
-      console.log('Depth:', depth, 'Processing attestation:', uid);
-      
-      // Create the node for this attestation
-      const node: AttestationNode = {
-          uid: uid,
-          data: await getAttestation(uid),
-          children: []
-      };
-      
-      // Check if it's indexed and get references
-      const isIndexed = await efs.isAttestationIndexed(uid);
-      if (!isIndexed) {
-          console.log('Attestation not indexed:', uid);
-          return node;
+
+  private stringifyWithBigInt(obj: any): string {
+    return JSON.stringify(obj, (key, value) => {
+      if (typeof value === 'bigint') {
+        return value.toString();
       }
-  
-      // Get and process references
-      const refUIDs = await efs.getReferencingAttestationUIDs(uid, schema);
-      console.log('Found', refUIDs.length, 'references at depth', depth);
-  
-      // Recursively process each reference and add to children
-      for (const ref of refUIDs) {
-          const child = await this.#traverseAttestations(ref, schema, depth + 1);
-          node.children.push(child);
-      }
-  
+      return value;
+    }, 2);
+  }
+
+  async #traverseAttestations(uid: string, schema: string, depth: number = 0): Promise<Topic> {
+    console.log('Depth:', depth, 'Processing attestation:', uid);
+
+    const items = await eas.getAttestationItems(uid);
+    const topicItem = items.find(item => item.name === 'topic');
+
+    // Create the node for this attestation
+    const node: Topic = {
+        uid: uid,
+        topic: topicItem?.value?.toString() || 'TopicError',
+        children: []
+    };
+
+    // Check if it's indexed and get references
+    const isIndexed = await efs.isAttestationIndexed(uid);
+    if (!isIndexed) {
+      console.log('Attestation not indexed:', uid);
       return node;
-  }
-  }
-
-
-  declare global {
-    interface HTMLElementTagNameMap {
-      'efs-browser': EfsBrowser;
     }
+
+    // Get and process references
+    const refUIDs = await efs.getReferencingAttestationUIDs(uid, schema);
+    console.log('Found', refUIDs.length, 'references at depth', depth);
+
+    // Recursively process each reference and add to children
+    for (const ref of refUIDs) {
+      const child = await this.#traverseAttestations(ref, schema, depth + 1);
+      node.children.push(child);
+    }
+
+    return node;
   }
+}
+
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'efs-browser': EfsBrowser;
+  }
+}

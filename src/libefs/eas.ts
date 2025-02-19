@@ -4,6 +4,7 @@ import {
     SchemaEncoder, 
     SchemaRegistry, 
     SchemaDecodedItem,
+    SchemaItem,
     Attestation
 } from "@ethereum-attestation-service/eas-sdk";
 
@@ -32,3 +33,26 @@ export async function getAttestation(uid: string): Promise<Attestation> {
 
     return attestation;
 }
+
+
+
+export async function getAttestationItems(uid: string): Promise<SchemaItem[]> {
+    console.log('eas.getAttestationItems running for', uid.slice(0, 7));
+
+    eas.connect(ethersProvider);
+    schemaRegistry.connect(ethersProvider);
+
+    const attestation = await eas.getAttestation(uid);
+    const schemaRecord = await schemaRegistry.getSchema({ uid: attestation.schema });
+    const schemaEncoder = new SchemaEncoder(schemaRecord.schema);
+    const decodedItems: SchemaDecodedItem[] = schemaEncoder.decodeData(attestation.data);
+
+    // Convert decoded items to SchemaItems
+    return decodedItems.map(item => ({
+        name: item.value.name,
+        value: item.value.value,
+        type: item.value.type
+    }));
+}
+
+export { eas, schemaRegistry };
