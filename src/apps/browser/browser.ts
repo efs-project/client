@@ -11,7 +11,7 @@ import { Attestation } from '@ethereum-attestation-service/eas-sdk';
 
 interface Topic {
   uid: string;
-  topic: string;
+  name: string;
   children: Topic[];
 }
 
@@ -71,7 +71,7 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
 
   private printTree(node: Topic, level: number = 0): void {
     const prefix = level > 0 ? '-'.repeat(level) : '';
-    console.log(`${prefix}${node.topic}`);
+    console.log(`${prefix}${node.name}`);
     
     for (const child of node.children) {
         this.printTree(child, level + 1);
@@ -96,7 +96,7 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
     // Create the node for this attestation
     const node: Topic = {
         uid: uid,
-        topic: topicItem?.value?.toString() || 'TopicError',
+        name: topicItem?.value?.toString() || 'TopicError',
         children: []
     };
 
