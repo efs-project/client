@@ -56,8 +56,18 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
         const schema = "0xddc07ff085923cb9a3c58bf684344b7672881e5a004044e3e99527861fed6435";
         
         const attestationTree = await this.#traverseAttestations(uid, schema);
-        // fixme console.log('Attestation tree:', JSON.stringify(attestationTree, null, 2));
+        //console.log('Attestation tree:', this.stringifyWithBigInt(attestationTree));
+        console.table(attestationTree);
     }
+
+    private stringifyWithBigInt(obj: any): string {
+      return JSON.stringify(obj, (key, value) => {
+          if (typeof value === 'bigint') {
+              return value.toString();
+          }
+          return value;
+      }, 2);
+  }
     
     async #traverseAttestations(uid: string, schema: string, depth: number = 0): Promise<AttestationNode> {
       console.log('Depth:', depth, 'Processing attestation:', uid);
