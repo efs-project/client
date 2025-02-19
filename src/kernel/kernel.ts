@@ -1,6 +1,6 @@
 import { EfsShell } from '../shell/shell.js';
 
-console.log('index.ts ran');
+console.log('kernel.ts running');
 
 function init() {
     console.log('init ran');
