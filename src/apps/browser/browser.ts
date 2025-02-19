@@ -20,11 +20,19 @@ const count = signal(0);
 @customElement('efs-browser')
 export class EfsBrowser extends SignalWatcher(LitElement) {
   static styles = css`
+    .card-image {
+      max-width: 200px;
+    }
   `;
 
   render() {
     return html`
-    <wa-card class="card-basic">
+    <wa-card with-image class="card-image">
+    <img
+      slot="image"
+      src="/efs.png"
+      alt="A kitten walks towards camera on top of pallet."
+    />
       <p>The count is ${count.get()}</p>
       <button @click=${this.#onClick}>Increment</button>
       </wa-card>
