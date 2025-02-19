@@ -3,7 +3,6 @@ import { hardhat } from 'viem/chains'
 
 import { FallbackProvider, JsonRpcProvider } from 'ethers'
 import type { Chain, Client, Transport } from 'viem'
-import { type Config, useClient } from 'wagmi'
 
 console.log('wallet.ts running');
  
