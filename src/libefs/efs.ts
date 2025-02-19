@@ -537,10 +537,10 @@ export async function isAttestationIndexed(uid: string): Promise<boolean> {
             args: [uid as `0x${string}`]
         }) as boolean;
         
-        console.log('Is attestation indexed:', result);
+        console.log('efs.isAttestationIndexed:', result, " [", uid.slice(0, 7), "]");
         return result;
     } catch (error: unknown) {
-        console.error('Failed to check attestation index status:', error);
+        console.error('Failed to check efs.isAttestationIndexed:', error);
         throw error;
     }
 }
@@ -552,7 +552,7 @@ export async function getReferencingAttestationUIDs(
     length?: number,
     reverseOrder: boolean = false
 ): Promise<`0x${string}`[]> {
-    console.log('getReferencingAttestationUIDs running for attestationUID:', attestationUID, 'schemaUID:', schemaUID);
+    console.log('efs.getReferencingAttestationUIDs for attestationUID:', attestationUID.slice(0, 7), 'schemaUID:', schemaUID.slice(0, 7));
     try {
         // If length not provided, get total count
         if (length === undefined) {
@@ -572,10 +572,10 @@ export async function getReferencingAttestationUIDs(
             ]
         }) as `0x${string}`[];
         
-        console.log('Referenced attestations:', result);
+        console.log('efs.getReferencingAttestationUIDs:', result);
         return result;
     } catch (error: unknown) {
-        console.error('Failed to get referencing attestations:', error);
+        console.error('Failed to get efs.getReferencingAttestationUIDs:', error);
         throw error;
     }
 }
@@ -584,6 +584,7 @@ export async function getReferencingAttestationUIDCount(
     attestationUID: string,
     schemaUID: string
 ): Promise<bigint> {
+    console.log('efs.getReferencingAttestationUIDCount for attestationUID:', attestationUID.slice(0, 7), 'schemaUID:', schemaUID.slice(0, 7));
     try {
         const result = await client.readContract({
             address: IndexerDef.address as `0x${string}`,
@@ -595,33 +596,10 @@ export async function getReferencingAttestationUIDCount(
             ]
         }) as bigint;
         
-        console.log('Referencing attestation count:', result);
+        console.log('efs.getReferencingAttestationUIDCount:', result);
         return result;
     } catch (error: unknown) {
-        console.error('Failed to get referencing attestation count:', error);
+        console.error('Failed to get efs.getReferencingAttestationUIDCount:', error);
         throw error;
     }
 }
-
-// Usage:
-// const uid = '0x21792c13ed1e2b20c3827ec68c644dd8a79b9c137c6e2f21aa9ccc9cafc1b7a5';
-// await isAttestationIndexed(uid);
-
-// export async function indexAttestation(uid: string) {
-//     console.log('indexAttestation running');
-    
-//     try {
-//         const result = await client.writeContract({
-//             address: IndexerDef.address,
-//             abi: IndexerDef.abi,
-//             functionName: 'indexAttestation',
-//             args: [uid]
-//         });
-        
-//         console.log('Indexing transaction hash:', result);
-//         return result;
-//     } catch (error) {
-//         console.error('Failed to index attestation:', error);
-//         throw error;
-//     }
-// }

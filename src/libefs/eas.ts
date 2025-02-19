@@ -28,6 +28,6 @@ export async function getAttestation(uid: string) {
     
     // foreach item in items write out the item.value.name, item.value.type and item.value.value
     items.forEach((item) => {
-        console.log(uid, ": ", item.value.name, " = ", item.value.value, " [", item.value.type, "]");
+        console.log(uid.slice(0, 7), ": ", item.value.name, " = ", item.value.value, " [", item.value.type, "]");
     });
 }
