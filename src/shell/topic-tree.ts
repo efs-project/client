@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { SignalWatcher } from '@lit-labs/signals';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.7/dist/components/tree/tree.js';
+import 'https://early.webawesome.com/webawesome@3.0.0-alpha.10/dist/components/tree/tree.js';
 
 @customElement('efs-topic-tree')
 export class EfsTopicTree extends SignalWatcher(LitElement) {

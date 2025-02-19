@@ -5,20 +5,23 @@ import {SignalArray} from 'signal-utils/array';
 import './topic-tree.js';
 import './topic-breadcrumb.js';
 import '../apps/browser/browser.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.7/dist/components/switch/switch.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.7/dist/components/page/page.js';
+import 'https://early.webawesome.com/webawesome@3.0.0-alpha.10/dist/components/switch/switch.js';
+import 'https://early.webawesome.com/webawesome@3.0.0-alpha.10/dist/components/page/page.js';
 
 @customElement('efs-shell')
 export class EfsShell extends SignalWatcher(LitElement) {
   static styles = css`
   `;
-  
+
+  private isDarkScheme: boolean = false;
+  private colorScheme: 'dark' | 'light' | 'auto' = 'auto';
+  private systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+
   constructor() {
     super();
     // Initial check
-    this.#updateColorScheme();
-    // Listen for changes in the prefers-color-scheme setting
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', this.#updateColorScheme.bind(this));
+    this.systemDark.addEventListener('change', this.#applyDark.bind(this));
+    this.#applyDark();
   }
 
   render() {
@@ -27,7 +30,7 @@ export class EfsShell extends SignalWatcher(LitElement) {
         <header slot=header>
           <!-- Topic breadcrumbs (Header) -->
           <efs-topic-breadcrumb></efs-topic-breadcrumb>
-          <wa-switch ?checked=${this.isDarkScheme} @wa-change=${this.#switchClick}>Dark mode</wa-switch>
+          <wa-switch ?checked=${this.isDarkScheme} @change=${this.#switchClick}>Dark mode</wa-switch>
         </header>
         <header slot=main-header>EFS Browser (main-header)</header>
         <div slot=navigation>
@@ -42,21 +45,20 @@ export class EfsShell extends SignalWatcher(LitElement) {
     `;
   }
 
-  /* Theme handling */
-  private isDarkScheme: boolean = false;
-
-  #updateColorScheme() {
-    this.isDarkScheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    this.#setColorScheme(this.isDarkScheme);
+  #applyDark(event?: MediaQueryListEvent) {
+    const matches = event ? event.matches : this.systemDark.matches;
+    const isDark = this.colorScheme === 'auto' ? matches : this.colorScheme === 'dark';
+    document.documentElement.classList.toggle('wa-dark', isDark);
+    this.isDarkScheme = isDark;
   }
 
+  /* Theme handling */
   #setColorScheme(isDarkMode?: boolean) {
     if (isDarkMode === undefined) {
-      isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      isDarkMode = this.systemDark.matches;
     }
-    
-    document.documentElement.classList.toggle('wa-theme-default-dark', isDarkMode);
-    document.documentElement.classList.toggle('wa-theme-default-light', !isDarkMode);
+    this.colorScheme = isDarkMode ? 'dark' : 'light';
+    this.#applyDark();
   }
 
   #switchClick(event: Event) {

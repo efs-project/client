@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { SignalWatcher, signal } from '@lit-labs/signals';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.7/dist/components/card/card.js';
+import 'https://early.webawesome.com/webawesome@3.0.0-alpha.10/dist/components/card/card.js';
 
 //import { client, ethersProvider } from '../../kernel/wallet.ts';
 import { getAttestation } from '../../libefs/eas.ts';
@@ -24,7 +24,7 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
 
   async #onClick() {
     count.set(count.get() + 1);
-    
+
     // TODO: Move me somewhere else
     getAttestation('0x6e4851b1ee4ee826a06a4514895640816b4143bf2408c33e5c1263275daf53ce');
   }
