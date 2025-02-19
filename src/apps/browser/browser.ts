@@ -70,7 +70,7 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
   }
 
   private printTree(node: Topic, level: number = 0): void {
-    const prefix = level > 0 ? '-'.repeat(level) : '';
+    const prefix = level > 0 ? '- '.repeat(level) : '';
     console.log(`${prefix}${node.name}`);
     
     for (const child of node.children) {
