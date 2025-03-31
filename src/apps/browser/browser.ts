@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { SignalWatcher, signal } from '@lit-labs/signals';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.10/dist/components/card/card.js';
+import 'https://early.webawesome.com/webawesome@3.0.0-alpha.12/dist/components/card/card.js';
 
 //import { client, ethersProvider } from '../../kernel/wallet.ts';
 import * as eas from '../../libefs/eas.ts';

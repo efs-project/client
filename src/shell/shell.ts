@@ -5,8 +5,8 @@ import {SignalArray} from 'signal-utils/array';
 import './topic-tree.js';
 import './topic-breadcrumb.js';
 import '../apps/browser/browser.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.10/dist/components/switch/switch.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.10/dist/components/page/page.js';
+import 'https://early.webawesome.com/webawesome@3.0.0-alpha.12/dist/components/switch/switch.js';
+import 'https://early.webawesome.com/webawesome@3.0.0-alpha.12/dist/components/page/page.js';
 
 @customElement('efs-shell')
 export class EfsShell extends SignalWatcher(LitElement) {
