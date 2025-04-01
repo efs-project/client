@@ -48,9 +48,9 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
     // const uid = "0x21792c13ed1e2b20c3827ec68c644dd8a79b9c137c6e2f21aa9ccc9cafc1b7a5"; // Bryce's attestation
     // const schema = "0xb96446c85ce538c1641a967f23ea11bbb4a390ef745fc5a9905689dbd48bac86"; // Schema of Dahk's attestation
     // getAttestation(uid);
-    // const isIndexed = await efs.isAttestationIndexed(uid);
-    // const refCount = await efs.getReferencingAttestationUIDCount(uid, schema);
-    // const refUIDs = await efs.getReferencingAttestationUIDs(uid, schema);
+    // const isIndexed = await eas.isAttestationIndexed(uid);
+    // const refCount = await eas.getReferencingAttestationUIDCount(uid, schema);
+    // const refUIDs = await eas.getReferencingAttestationUIDs(uid, schema);
     // console.log('isIndexed', isIndexed);
     // console.log('refCount', refCount);
     // console.log('refUIDs', refUIDs);
@@ -101,14 +101,14 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
     };
 
     // Check if it's indexed and get references
-    const isIndexed = await efs.isAttestationIndexed(uid);
+    const isIndexed = await eas.isAttestationIndexed(uid);
     if (!isIndexed) {
       console.log('Attestation not indexed:', uid);
       return node;
     }
 
     // Get and process references
-    const refUIDs = await efs.getReferencingAttestationUIDs(uid, schema);
+    const refUIDs = await eas.getReferencingAttestationUIDs(uid, schema);
     console.log('Found', refUIDs.length, 'references at depth', depth);
 
     // Recursively process each reference and add to children
