@@ -1,23 +1,38 @@
 import { ethersProvider, client } from '../kernel/wallet.ts';
-import * as easlib from "@ethereum-attestation-service/eas-sdk";
+import * as eassdk from "@ethereum-attestation-service/eas-sdk";
 
-const eas = new easlib.EAS('0xC2679fBD37d54388Ce493F1DB75320D236e1815e');
-const schemaRegistry = new easlib.SchemaRegistry('0x0a7E2Ff54e76B8E6659aedc9103FB21c038050D0');
+const easAddress = "0xC2679fBD37d54388Ce493F1DB75320D236e1815e";
+const easObj = new eassdk.EAS('0xC2679fBD37d54388Ce493F1DB75320D236e1815e');
+const schemaRegistry = new eassdk.SchemaRegistry('0x0a7E2Ff54e76B8E6659aedc9103FB21c038050D0');
 
-export async function getAttestation(uid: string): Promise<easlib.Attestation> {
+export class EAS extends eassdk.EAS {
+    constructor(address: string) {
+        super(address);
+    }
+
+    async getAttestation(uid: string): Promise<eassdk.Attestation> {
+        return await this.getAttestation(uid);
+    }
+
+    async getAttestationItems(uid: string): Promise<eassdk.SchemaItem[]> {
+        return await this.getAttestationItems(uid);
+    }
+}
+
+export async function getAttestation(uid: string): Promise<eassdk.Attestation> {
     console.log('eas.getAttestation running for %s', uid);
     
     if (!uid) {
         uid = "0x6e4851b1ee4ee826a06a4514895640816b4143bf2408c33e5c1263275daf53ce";
     }
 
-    eas.connect(ethersProvider);
+    easObj.connect(ethersProvider);
     schemaRegistry.connect(ethersProvider);
 
-    const attestation = await eas.getAttestation(uid);
+    const attestation = await easObj.getAttestation(uid);
     const schemaRecord = await schemaRegistry.getSchema({ uid: attestation.schema });
-    const schemaEncoder = new easlib.SchemaEncoder(schemaRecord.schema);
-    const items: easlib.SchemaDecodedItem[] = schemaEncoder.decodeData(attestation.data);
+    const schemaEncoder = new eassdk.SchemaEncoder(schemaRecord.schema);
+    const items: eassdk.SchemaDecodedItem[] = schemaEncoder.decodeData(attestation.data);
     
     // Log decoded data
     items.forEach((item) => {
@@ -29,16 +44,16 @@ export async function getAttestation(uid: string): Promise<easlib.Attestation> {
 
 
 
-export async function getAttestationItems(uid: string): Promise<easlib.SchemaItem[]> {
+export async function getAttestationItems(uid: string): Promise<eassdk.SchemaItem[]> {
     console.log('eas.getAttestationItems running for', uid.slice(0, 7));
 
-    eas.connect(ethersProvider);
+    easObj.connect(ethersProvider);
     schemaRegistry.connect(ethersProvider);
 
-    const attestation = await eas.getAttestation(uid);
+    const attestation = await easObj.getAttestation(uid);
     const schemaRecord = await schemaRegistry.getSchema({ uid: attestation.schema });
-    const schemaEncoder = new easlib.SchemaEncoder(schemaRecord.schema);
-    const decodedItems: easlib.SchemaDecodedItem[] = schemaEncoder.decodeData(attestation.data);
+    const schemaEncoder = new eassdk.SchemaEncoder(schemaRecord.schema);
+    const decodedItems: eassdk.SchemaDecodedItem[] = schemaEncoder.decodeData(attestation.data);
 
     // Convert decoded items to SchemaItems
     return decodedItems.map(item => ({
@@ -1056,4 +1071,4 @@ const IndexerDef = {
       }
   }
 
-export { eas, schemaRegistry, easlib };
+export { easObj, schemaRegistry, eassdk};
