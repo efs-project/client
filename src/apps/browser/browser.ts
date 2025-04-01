@@ -3,17 +3,7 @@ import { customElement } from 'lit/decorators.js';
 import { SignalWatcher, signal } from '@lit-labs/signals';
 import 'https://early.webawesome.com/webawesome@3.0.0-alpha.12/dist/components/card/card.js';
 
-//import { client, ethersProvider } from '../../kernel/wallet.ts';
-import * as eas from '../../libefs/eas.ts';
-//import { isAttestationIndexed, getReferencingAttestationUIDs, getReferencingAttestationUIDCount } from '../../libefs/efs.ts'
-import * as efs from '../../libefs/efs.ts'
-import { Attestation } from '@ethereum-attestation-service/eas-sdk';
-
-interface Topic {
-  uid: string;
-  name: string;
-  children: Topic[];
-}
+import { EFS, Topic, TopicStore, isAttestationIndexed, getReferencingAttestationUIDs, getAttestationItems } from '../../libefs';
 
 const count = signal(0);
 
@@ -24,6 +14,15 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
       max-width: 200px;
     }
   `;
+
+  private efs: EFS;
+    
+  constructor() {
+    super();
+    // Initialize EFS with the appropriate address
+    const easAddress = "0xC2679fBD37d54388Ce493F1DB75320D236e1815e";
+    this.efs = new EFS(easAddress);
+  }
 
   render() {
     return html`
@@ -90,7 +89,7 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
   async #traverseAttestations(uid: string, schema: string, depth: number = 0): Promise<Topic> {
     console.log('Depth:', depth, 'Processing attestation:', uid);
 
-    const items = await eas.getAttestationItems(uid);
+    const items = await getAttestationItems(uid);
     const topicItem = items.find(item => item.name === 'topic');
 
     // Create the node for this attestation
@@ -101,14 +100,14 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
     };
 
     // Check if it's indexed and get references
-    const isIndexed = await eas.isAttestationIndexed(uid);
+    const isIndexed = await isAttestationIndexed(uid);
     if (!isIndexed) {
       console.log('Attestation not indexed:', uid);
       return node;
     }
 
     // Get and process references
-    const refUIDs = await eas.getReferencingAttestationUIDs(uid, schema);
+    const refUIDs = await getReferencingAttestationUIDs(uid, schema);
     console.log('Found', refUIDs.length, 'references at depth', depth);
 
     // Recursively process each reference and add to children
