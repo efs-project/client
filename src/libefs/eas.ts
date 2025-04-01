@@ -1,17 +1,10 @@
 import { ethersProvider, client } from '../kernel/wallet.ts';
-import { 
-    EAS, 
-    SchemaEncoder, 
-    SchemaRegistry, 
-    SchemaDecodedItem,
-    SchemaItem,
-    Attestation
-} from "@ethereum-attestation-service/eas-sdk";
+import * as easlib from "@ethereum-attestation-service/eas-sdk";
 
-const eas = new EAS('0xC2679fBD37d54388Ce493F1DB75320D236e1815e');
-const schemaRegistry = new SchemaRegistry('0x0a7E2Ff54e76B8E6659aedc9103FB21c038050D0');
+const eas = new easlib.EAS('0xC2679fBD37d54388Ce493F1DB75320D236e1815e');
+const schemaRegistry = new easlib.SchemaRegistry('0x0a7E2Ff54e76B8E6659aedc9103FB21c038050D0');
 
-export async function getAttestation(uid: string): Promise<Attestation> {
+export async function getAttestation(uid: string): Promise<easlib.Attestation> {
     console.log('eas.getAttestation running for %s', uid);
     
     if (!uid) {
@@ -23,8 +16,8 @@ export async function getAttestation(uid: string): Promise<Attestation> {
 
     const attestation = await eas.getAttestation(uid);
     const schemaRecord = await schemaRegistry.getSchema({ uid: attestation.schema });
-    const schemaEncoder = new SchemaEncoder(schemaRecord.schema);
-    const items: SchemaDecodedItem[] = schemaEncoder.decodeData(attestation.data);
+    const schemaEncoder = new easlib.SchemaEncoder(schemaRecord.schema);
+    const items: easlib.SchemaDecodedItem[] = schemaEncoder.decodeData(attestation.data);
     
     // Log decoded data
     items.forEach((item) => {
@@ -36,7 +29,7 @@ export async function getAttestation(uid: string): Promise<Attestation> {
 
 
 
-export async function getAttestationItems(uid: string): Promise<SchemaItem[]> {
+export async function getAttestationItems(uid: string): Promise<easlib.SchemaItem[]> {
     console.log('eas.getAttestationItems running for', uid.slice(0, 7));
 
     eas.connect(ethersProvider);
@@ -44,8 +37,8 @@ export async function getAttestationItems(uid: string): Promise<SchemaItem[]> {
 
     const attestation = await eas.getAttestation(uid);
     const schemaRecord = await schemaRegistry.getSchema({ uid: attestation.schema });
-    const schemaEncoder = new SchemaEncoder(schemaRecord.schema);
-    const decodedItems: SchemaDecodedItem[] = schemaEncoder.decodeData(attestation.data);
+    const schemaEncoder = new easlib.SchemaEncoder(schemaRecord.schema);
+    const decodedItems: easlib.SchemaDecodedItem[] = schemaEncoder.decodeData(attestation.data);
 
     // Convert decoded items to SchemaItems
     return decodedItems.map(item => ({
@@ -1063,4 +1056,4 @@ const IndexerDef = {
       }
   }
 
-export { eas, schemaRegistry };
+export { eas, schemaRegistry, easlib };
