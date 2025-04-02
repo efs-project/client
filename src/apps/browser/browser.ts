@@ -96,6 +96,7 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
     const node: Topic = {
         uid: uid,
         name: topicItem?.value?.toString() || 'TopicError',
+        parent: '',
         children: []
     };
 
