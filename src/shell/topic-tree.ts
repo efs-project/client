@@ -159,22 +159,54 @@ export class EfsTopicTree extends SignalWatcher(LitElement) {
   }
 
   #handleSelect(event: CustomEvent) {
+    // This handler might now primarily be for keyboard navigation
+    // or clicks outside the span if those occur.
     const selectedItem = event.detail.selection[0];
     if (!selectedItem || !selectedItem.dataset.topicId) return;
     
     const topicId = selectedItem.dataset.topicId;
-    console.log('Selected topic ID:', topicId);
+    console.log('Selection Change Event (wa-tree):', topicId);
     
-    // Load the selected topic's children if not already loaded
+    // Load children if needed (might be redundant if span click already triggered load)
     if (topicId && !this.childTopics.has(topicId)) {
       this.loadChildTopics(topicId);
     }
     
-    // Set as current topic (but only if it's actually changing)
+    // Set as current topic if different
     if (topicId && topicId !== currentTopic.get().uid && Kernel.EFS?.TopicStore) {
       Kernel.EFS.TopicStore.getById(topicId).then(topic => {
         if (topic) currentTopic.set(topic);
       });
+    }
+  }
+
+  #handleSpanClick(event: Event, topicId: string) {
+    event.stopPropagation(); // Prevent event from bubbling to wa-tree-item/wa-tree
+    console.log('Span Clicked:', topicId);
+
+    // Load children if needed when the span is clicked
+    if (topicId && !this.childTopics.has(topicId)) {
+      // Check if it *should* have children before attempting load
+      const topic = this.findTopic(topicId); 
+      // Use the same logic as isExpandable or fetch topic if needed to check
+      // For simplicity, let's try loading unconditionally for now, 
+      // but ideally, check if it's potentially expandable first.
+      this.loadChildTopics(topicId); 
+    }
+
+    // Set as current topic if different
+    if (topicId && topicId !== currentTopic.get().uid && Kernel.EFS?.TopicStore) {
+      Kernel.EFS.TopicStore.getById(topicId).then(topic => {
+        if (topic) {
+          console.log('Setting current topic from span click:', topic.uid);
+          currentTopic.set(topic);
+          // The willUpdate -> selectTopicInTree flow should handle visual selection
+        }
+      });
+    } else {
+       // If clicking the already current topic, ensure it's visually selected
+       // This might be needed if the wa-selection-change event was suppressed
+       this.selectTopicInTree(topicId);
     }
   }
 
@@ -198,18 +230,35 @@ export class EfsTopicTree extends SignalWatcher(LitElement) {
   // Recursively render a topic and its children
   renderTopicTree(topicId: string, depth: number = 0): any {
     const topic = this.findTopic(topicId);
-    if (!topic) return null;
+    // If the topic isn't found locally, we can't render it yet.
+    // This might happen if ensureTopicIsVisible hasn't completed or found the topic.
+    if (!topic) {
+        // Optionally, fetch the topic here if it's expected but not found
+        // Kernel.EFS.TopicStore.getById(topicId).then(fetchedTopic => {
+        //  if (fetchedTopic) { /* Add to local state or re-render */ }
+        // });
+        console.warn(`Topic ${topicId} not found in local cache during render.`);
+        return null; 
+    }
     
     const children = this.childTopics.get(topicId) || [];
-    const hasChildren = children.length > 0;
+    const childrenLoaded = this.childTopics.has(topicId);
     
+    // Assume Topic might have a 'hasChildren' property or similar indicator.
+    // Adjust 'topic.hasChildren' if the actual property name is different (e.g., childCount > 0).
+    // If no such property exists, remove `|| (!childrenLoaded && topic.hasChildren)` 
+    // and the expander will only appear after loading children.
+    const isExpandable = (childrenLoaded && children.length > 0) || (!childrenLoaded && (topic as any).hasChildren); 
+
     return html`
       <wa-tree-item 
         data-topic-id="${topic.uid}"
-        ?expandable=${hasChildren}
+        ?expandable=${isExpandable}
+        @wa-expand=${() => this.loadChildTopics(topicId)} 
+        @wa-collapse=${() => { /* Optional: handle collapse if needed */ }}
       >
-        ${topic.name}
-        ${hasChildren ? children.map(child => this.renderTopicTree(child.uid, depth + 1)) : ''}
+        <span @click=${(e: Event) => this.#handleSpanClick(e, topic.uid)}>${topic.name}</span>
+        ${childrenLoaded && children.length > 0 ? children.map(child => this.renderTopicTree(child.uid, depth + 1)) : ''}
       </wa-tree-item>
     `;
   }
@@ -218,12 +267,16 @@ export class EfsTopicTree extends SignalWatcher(LitElement) {
   findTopic(topicId: string): Topic | null {
     if (this.rootTopic?.uid === topicId) return this.rootTopic;
     
-    for (const [_, children] of this.childTopics.entries()) {
+    // Search within the loaded children
+    for (const children of this.childTopics.values()) {
       const found = children.find(child => child.uid === topicId);
       if (found) return found;
     }
-    
-    return null;
+
+    // Topic not found in the current map (root or loaded children).
+    // It might exist in the store but hasn't been loaded into the map via its parent yet.
+    // Returning null here is correct based on current logic.
+    return null; 
   }
 }
 
