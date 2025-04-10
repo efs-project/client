@@ -27,6 +27,8 @@ export class TopicStore {
     }
 
     async getById(uid: string): Promise<Topic | null> {
+        console.log('getById', uid);
+        if (uid === TOPIC_ROOT_PARENT) { return null; }
         const attestation = await this.eas.getAttestation(uid);
         if (!attestation) {
             return null;
