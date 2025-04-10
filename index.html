@@ -13,10 +13,11 @@
     <link rel="stylesheet" href="https://early.webawesome.com/webawesome@3.0.0-alpha.12/dist/styles/webawesome.css" />
 
     <script type="module">
-      import { init } from '/src/kernel/kernel.ts';
+      import { init, Kernel } from '/src/kernel/kernel.ts';
 
       document.addEventListener('DOMContentLoaded', () => {
         init();
+        window.kernel = Kernel;
        });
     </script>
 
