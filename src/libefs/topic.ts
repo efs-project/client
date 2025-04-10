@@ -64,13 +64,16 @@ export class TopicStore {
 
     async getPath(topic: Topic): Promise<Topic[]> {
         console.log('getPath', topic.uid, topic.name);
-        const path: Topic[] = [];
-        path.push(topic);
+    
         if (topic.parent === TOPIC_ROOT_PARENT) {
-            return path;
+            return [topic];
         }
-        path.concat(await this.getPathById(topic.parent));
-        return path;
+        
+        const parentPath = await this.getPathById(topic.parent);
+        const completePath = [...parentPath, topic];
+        
+        console.log('getPath', topic.uid, topic.name, 'path:', completePath);
+        return completePath;
     }
 
     async getByName(name: string, parentUid?: string): Promise<Topic | null> {
