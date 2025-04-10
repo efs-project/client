@@ -4,6 +4,7 @@ import { NO_EXPIRATION, SchemaRegistry, SchemaEncoder, SchemaItem, SchemaDecoded
 
 export const TOPIC_SCHEMA = "0xddc07ff085923cb9a3c58bf684344b7672881e5a004044e3e99527861fed6435";
 export const TOPIC_ROOT_PARENT = "0x0000000000000000000000000000000000000000000000000000000000000000";
+export const TOPIC_ROOT = "0x6e4851b1ee4ee826a06a4514895640816b4143bf2408c33e5c1263275daf53ce";
 
 export interface Topic {
     uid: string;
@@ -53,6 +54,35 @@ export class TopicStore {
         return topic;
     }
 
+    async getChildrenById(topic: string): Promise<Topic[]> {
+        const topicObj = await this.getById(topic);
+        if (!topicObj) {
+            return [];
+        }
+        return this.getChildren(topicObj);
+    }
+
+    async getChildren(topic: Topic): Promise<Topic[]> {
+        const children: Topic[] = [];
+
+        const childIds = await this.eas.getReferencingAttestationUIDs(topic.uid, TOPIC_SCHEMA)
+
+        // Loop through each child ID and fetch the corresponding topic
+        for (const childId of childIds) {
+            const childTopic = await this.getById(childId);
+            if (childTopic) {
+                children.push(childTopic);
+            }
+        }
+
+        return children;
+    }
+
+
+
+
+
+
     async getPathById(uid: string): Promise<Topic[]> {
         console.log('getPathById', uid);
         const topic = await this.getById(uid);
@@ -87,17 +117,11 @@ export class TopicStore {
         return pathString;
     }
 
-    async getChildren(topic: Topic): Promise<Topic[]> {
-        const children: Topic[] = [];
-        return children;
-    }
-
     async createTopic(name: string, parentUid: string): Promise<Topic> {
         const topic: Topic = {
             uid: '',
             name: name,
-            parent: parentUid,
-            children: []
+            parent: parentUid
         };
 
         // Add to cache
