@@ -9,13 +9,18 @@ export class EASx extends eassdk.EAS {
         super(address);
     }
 
-    async getAttestation(uid: string): Promise<eassdk.Attestation> {
-        return await this.getAttestation(uid);
+    public async getAttestationItemsByUid(uid: string): Promise<eassdk.SchemaItem[]> {
+      console.log("EASx.getAttestationItemsByUid running for %s", uid);
+      const att = await this.getAttestation(uid);
+      return this.getAttestationItems(att);
     }
 
-    async getAttestationItems(uid: string): Promise<eassdk.SchemaItem[]> {
-        return await this.getAttestationItems(uid);
+    public async getAttestationItems(att: eassdk.Attestation): Promise<eassdk.SchemaItem[]> {
+      console.log("EASx.getAttestationItems running for %s", att.uid);
+      let items: eassdk.SchemaItem[] = [];
+      return items;
     }
+
 }
 
 export async function getAttestation(uid: string): Promise<eassdk.Attestation> {
