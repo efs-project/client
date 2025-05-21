@@ -8,8 +8,8 @@ import {Topic, TopicStore} from '../libefs';
 import './topic-tree.js';
 import './topic-breadcrumb.js';
 import '../apps/browser/browser.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.12/dist/components/switch/switch.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.12/dist/components/page/page.js';
+import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/switch/switch.js';
+import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/page/page.js';
 
 const DEFAULT_TOPIC: Topic = {
   uid: 'default',

@@ -5,15 +5,15 @@ import { Kernel } from '../../kernel/kernel';
 import { currentTopic } from '../../shell/shell';
 
 // Import Web Awesome components
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.12/dist/components/card/card.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.12/dist/components/spinner/spinner.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.12/dist/components/divider/divider.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.12/dist/components/tab-group/tab-group.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.12/dist/components/tab/tab.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.12/dist/components/tab-panel/tab-panel.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.12/dist/components/button/button.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.12/dist/components/avatar/avatar.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.12/dist/components/format-date/format-date.js';
+import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/card/card.js';
+import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/spinner/spinner.js';
+import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/divider/divider.js';
+import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/tab-group/tab-group.js';
+import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/tab/tab.js';
+import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/tab-panel/tab-panel.js';
+import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/button/button.js';
+import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/avatar/avatar.js';
+import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/format-date/format-date.js';
 
 import { 
   EFS, 

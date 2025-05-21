@@ -1,8 +1,8 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, state, query } from 'lit/decorators.js';
 import { SignalWatcher } from '@lit-labs/signals';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.12/dist/components/tree/tree.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.12/dist/components/tree-item/tree-item.js';
+import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/tree/tree.js';
+import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/tree-item/tree-item.js';
 
 import { currentTopic } from './shell.js';
 import { Kernel } from '../kernel/kernel.js';

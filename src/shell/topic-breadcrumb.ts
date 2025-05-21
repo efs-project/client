@@ -4,8 +4,8 @@ import { SignalWatcher } from '@lit-labs/signals';
 import { currentTopic } from './shell.js';
 import { Kernel } from '../kernel/kernel.js';
 import { Topic } from '../libefs';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.12/dist/components/breadcrumb/breadcrumb.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.12/dist/components/breadcrumb-item/breadcrumb-item.js';
+import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/breadcrumb/breadcrumb.js';
+import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/breadcrumb-item/breadcrumb-item.js';
 
 @customElement('efs-topic-breadcrumb')
 export class EfsTopicBreadcrumb extends SignalWatcher(LitElement) {
