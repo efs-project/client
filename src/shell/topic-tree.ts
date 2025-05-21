@@ -13,7 +13,6 @@ export class EfsTopicTree extends SignalWatcher(LitElement) {
   static styles = css`
     wa-tree {
       width: 100%;
-      max-height: 400px;
       overflow-y: auto;
     }
   `;
