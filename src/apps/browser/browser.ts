@@ -111,7 +111,7 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
   private messages: Message[] = [];
   
   @state()
-  private activeTab: string = 'messages';
+  private activeTab: string = 'info';
   
   // Track the last loaded topic to prevent infinite loops
   private lastLoadedTopicUid: string = '';
