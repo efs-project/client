@@ -526,7 +526,7 @@ const deployedContracts = {
       },
     },
     TopicResolver: {
-      address: "0xDbd303b52d4F3E85Ceeced70E2361833EAEB788d",
+      address: "0xb3e5c9e0fAe0656c3b59238437D13c5F77b79221",
       abi: [
         {
           inputs: [

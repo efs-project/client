@@ -2,9 +2,9 @@ import { EFS } from './efs';
 import { EASx } from './eas';
 import { NO_EXPIRATION, SchemaRegistry, SchemaEncoder, SchemaItem, SchemaDecodedItem } from '@ethereum-attestation-service/eas-sdk';
 
-export const TOPIC_SCHEMA = "0xddc07ff085923cb9a3c58bf684344b7672881e5a004044e3e99527861fed6435";
+export const TOPIC_SCHEMA = "0x356053e234258d193725c3452a977073bbb2f7380e2a1821133388e9c5a4067e";
 export const TOPIC_ROOT_PARENT = "0x0000000000000000000000000000000000000000000000000000000000000000";
-export const TOPIC_ROOT = "0x6e4851b1ee4ee826a06a4514895640816b4143bf2408c33e5c1263275daf53ce";
+export const TOPIC_ROOT = "0x81d2ebf70ea3d90b2c7b8bc710c8ab96ec80ff898fb26b71f25bfedb861d63dc";
 
 export interface Topic {
     uid: string;

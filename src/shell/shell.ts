@@ -4,7 +4,7 @@ import {SignalWatcher, signal} from '@lit-labs/signals';
 import {SignalArray,} from 'signal-utils/array';
 import {Kernel} from '../kernel/kernel';
 import {EFS, EASx} from '../libefs';
-import {Topic, TopicStore} from '../libefs';
+import {Topic, TopicStore, TOPIC_ROOT} from '../libefs';
 import './topic-tree.js';
 import './topic-breadcrumb.js';
 import '../apps/browser/browser.js';
@@ -19,8 +19,6 @@ const DEFAULT_TOPIC: Topic = {
 
 export const currentTopic = signal<Topic>(DEFAULT_TOPIC);
 
-//const ROOT_TOPIC_UID = "0x6e4851b1ee4ee826a06a4514895640816b4143bf2408c33e5c1263275daf53ce";
-const ROOT_TOPIC_UID = "0x829a700e3f58635a529eeda388abddf1fc9f3a201c0614d1fb44a8002b2cb2f6";
 
 @customElement('efs-shell')
 export class EfsShell extends SignalWatcher(LitElement) {
@@ -44,7 +42,7 @@ export class EfsShell extends SignalWatcher(LitElement) {
     this.efs = Kernel.EFS;
     this.eas = this.efs.EAS;
     this.topicStore = this.efs.TopicStore;
-    this.topicStore.getById(ROOT_TOPIC_UID).then((topic) => {
+    this.topicStore.getById(TOPIC_ROOT).then((topic) => {
       if (topic) {
         this.setCurrentTopic(topic);
       }

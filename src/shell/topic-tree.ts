@@ -42,6 +42,7 @@ export class EfsTopicTree extends SignalWatcher(LitElement) {
   }
 
   async initializeTopicTree() {
+    console.log("topic-tree.initializeTopicTree");
     try {
       if (!Kernel.EFS?.TopicStore) {
         console.log("TopicStore not available yet, waiting...");
