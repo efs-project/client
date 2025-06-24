@@ -61,10 +61,6 @@ export class EASx extends eassdk.EAS {
 
 export async function getAttestation(uid: string): Promise<eassdk.Attestation> {
     console.log('eas.getAttestation running for %s', uid);
-    
-    if (!uid) {
-        uid = "0x6e4851b1ee4ee826a06a4514895640816b4143bf2408c33e5c1263275daf53ce";
-    }
 
     easObj.connect(ethersProvider);
     schemaRegistry.connect(ethersProvider);
