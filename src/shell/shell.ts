@@ -1,15 +1,16 @@
 import {LitElement, html, css} from 'lit';
 import {customElement} from 'lit/decorators.js';
 import {SignalWatcher, signal} from '@lit-labs/signals';
-import {SignalArray,} from 'signal-utils/array';
 import {Kernel} from '../kernel/kernel';
-import {EFS, EASx} from '../libefs';
-import {Topic, TopicStore, TOPIC_ROOT} from '../libefs';
+import {EFS, EASx, Topic, TopicStore, TOPIC_ROOT} from '../libefs';
+import { account, connectWallet } from '../kernel/wallet';
 import './topic-tree.js';
 import './topic-breadcrumb.js';
 import '../apps/browser/browser.js';
 import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/switch/switch.js';
 import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/page/page.js';
+import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/button/button.js';
+
 
 const DEFAULT_TOPIC: Topic = {
   uid: 'default',
@@ -19,10 +20,14 @@ const DEFAULT_TOPIC: Topic = {
 
 export const currentTopic = signal<Topic>(DEFAULT_TOPIC);
 
-
 @customElement('efs-shell')
 export class EfsShell extends SignalWatcher(LitElement) {
   static styles = css`
+    header[slot="header"] {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
   `;
 
   private isDarkScheme: boolean = false;
@@ -55,12 +60,18 @@ export class EfsShell extends SignalWatcher(LitElement) {
   }
 
   render() {
+    const walletAddress = account.get();
+
     return html`
       <wa-page mobile-breakpoint="50ch">
-        <header slot=header>
-          <!-- Topic breadcrumbs (Header) -->
+        <header slot="header">
           <efs-topic-breadcrumb></efs-topic-breadcrumb>
-          <wa-switch ?checked=${this.isDarkScheme} @change=${this.#switchClick}>Dark mode</wa-switch>
+          <div>
+            <wa-switch ?checked=${this.isDarkScheme} @change=${this.#switchClick}>Dark mode</wa-switch>
+            <wa-button @click=${connectWallet}>
+              ${walletAddress ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}` : 'Connect Wallet'}
+            </wa-button>
+          </div>
         </header>
         <header slot=main-header>EFS Browser (main-header)</header>
         <div slot=navigation>
@@ -70,7 +81,6 @@ export class EfsShell extends SignalWatcher(LitElement) {
         <main>
           <efs-browser></efs-browser>
         </main>
-
       </wa-page>
     `;
   }

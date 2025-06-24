@@ -1,10 +1,11 @@
 import { EFS } from './efs';
 import { EASx } from './eas';
 import { NO_EXPIRATION, SchemaRegistry, SchemaEncoder, SchemaItem, SchemaDecodedItem } from '@ethereum-attestation-service/eas-sdk';
+import { account } from '../kernel/wallet';
 
-export const TOPIC_SCHEMA = "0x356053e234258d193725c3452a977073bbb2f7380e2a1821133388e9c5a4067e";
+export const TOPIC_SCHEMA = "0xa69da302c3d5e055f7ca902b4acc9f4fb7c2180ca4e4121a1c7e1a1d1015b005";
 export const TOPIC_ROOT_PARENT = "0x0000000000000000000000000000000000000000000000000000000000000000";
-export const TOPIC_ROOT = "0x81d2ebf70ea3d90b2c7b8bc710c8ab96ec80ff898fb26b71f25bfedb861d63dc";
+export const TOPIC_ROOT = "0x6a66128da011560d613a7decb18b6cf930824597f2fad77c9bf1f3d25b9d9e8e";
 
 export interface Topic {
     uid: string;
@@ -119,17 +120,47 @@ export class TopicStore {
         return pathString;
     }
 
-    async createTopic(name: string, parentUid: string): Promise<Topic> {
-        const topic: Topic = {
-            uid: '',
-            name: name,
-            parent: parentUid
+    async createTopic(name: string, parentUid: string): Promise<Topic | null> {
+        if (!account.get()) {
+            throw new Error("Wallet not connected");
+        }
+
+        const schemaEncoder = new SchemaEncoder("string name");
+        const encodedData = schemaEncoder.encodeData([
+            { name: "name", value: name, type: "string" },
+        ]);
+
+        const attestationData = {
+            schema: TOPIC_SCHEMA as `0x${string}`,
+            data: {
+                recipient: "0x0000000000000000000000000000000000000000",
+                expirationTime: BigInt(0),
+                revocable: false,
+                refUID: parentUid as `0x${string}`,
+                data: encodedData,
+                value: BigInt(0),
+            },
         };
 
-        // Add to cache
-        this.topicCache.set(topic.uid, topic);
-        // Add to name map
-        this.topicNameToId.set(name, topic.uid);
-        return topic;
+        try {
+            const tx = await this.eas.attest(attestationData);
+            const newAttestationUID = await tx.wait();
+
+            if (newAttestationUID) {
+                await this.eas.indexAttestation(newAttestationUID as `0x${string}`);
+
+                // Invalidate cache for the parent topic's children
+                // and fetch the new topic
+                const newTopic = await this.getById(newAttestationUID);
+                if (newTopic) {
+                    this.topicCache.set(newTopic.uid, newTopic);
+                    return newTopic;
+                }
+            }
+            return null;
+        } catch (error) {
+            console.error("Failed to create topic:", error);
+            return null;
+        }
     }
 }
