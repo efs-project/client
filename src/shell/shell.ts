@@ -28,6 +28,38 @@ export class EfsShell extends SignalWatcher(LitElement) {
         align-items: center;
         justify-content: space-between;
     }
+    
+    wa-button.wallet-button {
+      font-size: 0.8rem;
+      font-weight: 400;
+    }
+    
+    wa-button.wallet-button::part(base) {
+      padding: 0.35rem 0.7rem;
+      border-radius: 0.3rem;
+      background-color: transparent;
+      color: #6c757d;
+      border: 1px solid #dee2e6;
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+      font-weight: 400;
+    }
+    
+    wa-button.wallet-button::part(base):hover {
+      background-color: rgba(0, 0, 0, 0.04);
+      border-color: #adb5bd;
+      color: #495057;
+    }
+    
+    wa-button.wallet-button[data-connected="true"]::part(base) {
+      color: #0066cc;
+      border-color: #b3d9ff;
+    }
+    
+    wa-button.wallet-button[data-connected="true"]::part(base):hover {
+      background-color: rgba(0, 102, 204, 0.05);
+      border-color: #0066cc;
+    }
   `;
 
   private isDarkScheme: boolean = false;
@@ -68,7 +100,13 @@ export class EfsShell extends SignalWatcher(LitElement) {
           <efs-topic-breadcrumb></efs-topic-breadcrumb>
           <div>
             <wa-switch ?checked=${this.isDarkScheme} @change=${this.#switchClick}>Dark mode</wa-switch>
-            <wa-button @click=${connectWallet}>
+            <wa-button 
+              class="wallet-button" 
+              size="small" 
+              variant="outline"
+              data-connected=${walletAddress ? 'true' : 'false'}
+              @click=${connectWallet}
+            >
               ${walletAddress ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}` : 'Connect Wallet'}
             </wa-button>
           </div>

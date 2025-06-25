@@ -23,8 +23,33 @@ export class EfsTopicTree extends SignalWatcher(LitElement) {
       align-items: center;
       gap: 4px;
     }
-    .add-button {
-      --wa-button-size: 1rem;
+    wa-button.add-button {
+      opacity: 0.7;
+      transition: opacity 0.2s ease;
+    }
+    
+    wa-button.add-button::part(base) {
+      padding: 0.25rem;
+      border-radius: 0.25rem;
+      background-color: transparent;
+      color: #6c757d;
+      border: none;
+      font-size: 0.7rem;
+      min-height: auto;
+      min-width: auto;
+    }
+    
+    wa-button.add-button::part(base):hover {
+      background-color: #f8f9fa;
+      color: #495057;
+    }
+    
+    .topic-item:hover wa-button.add-button {
+      opacity: 1;
+    }
+    
+    wa-button.add-button wa-icon {
+      font-size: 0.75rem;
     }
   `;
 
