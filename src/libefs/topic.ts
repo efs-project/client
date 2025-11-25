@@ -1,11 +1,9 @@
 import { EFS } from './efs';
 import { EASx } from './eas';
-import { NO_EXPIRATION, SchemaRegistry, SchemaEncoder, SchemaItem, SchemaDecodedItem } from '@ethereum-attestation-service/eas-sdk';
+import { SchemaRegistry, SchemaEncoder, SchemaDecodedItem } from '@ethereum-attestation-service/eas-sdk';
 import { account } from '../kernel/wallet';
-
-export const TOPIC_SCHEMA = "0xa69da302c3d5e055f7ca902b4acc9f4fb7c2180ca4e4121a1c7e1a1d1015b005";
-export const TOPIC_ROOT_PARENT = "0x0000000000000000000000000000000000000000000000000000000000000000";
-export const TOPIC_ROOT = "0x6a66128da011560d613a7decb18b6cf930824597f2fad77c9bf1f3d25b9d9e8e";
+import { TOPIC_SCHEMA, TOPIC_ROOT_PARENT, TOPIC_ROOT } from './contractConstants';
+export { TOPIC_SCHEMA, TOPIC_ROOT_PARENT, TOPIC_ROOT };
 
 export interface Topic {
     uid: string;
@@ -14,17 +12,25 @@ export interface Topic {
 }
 
 export class TopicStore {
-    private efs: EFS;
     private eas: EASx;
     private registry: SchemaRegistry;
 
     private topicCache: Map<string, Topic> = new Map();
-    private topicNameToId: Map<string, string> = new Map(); // Maps uid to name
 
     constructor(efs: EFS) {
-        this.efs = efs;
         this.eas = efs.EAS;
         this.registry = efs.Registry;
+    }
+    // ... (skipping unchanged methods)
+    async getByName(_name: string, _parentUid?: string): Promise<Topic | null> {
+        const topic = null;
+        return topic;
+    }
+
+
+    async getPathString(_topic: Topic): Promise<string> {
+        const pathString = '';
+        return pathString;
     }
 
     async getById(uid: string): Promise<Topic | null> {
@@ -38,11 +44,11 @@ export class TopicStore {
         if (schema !== TOPIC_SCHEMA) {
             throw new Error(`Attestation ${uid} does not have Topic schema ${TOPIC_SCHEMA}`);
         }
-        
+
         const schemaRecord = await this.registry.getSchema({ uid: attestation.schema });
         const schemaEncoder = new SchemaEncoder(schemaRecord.schema);
         const items: SchemaDecodedItem[] = schemaEncoder.decodeData(attestation.data);
-        
+
         // Log decoded data
         items.forEach((item) => {
             console.log(uid.slice(0, 7), ": ", item.value.name, " = ", item.value.value, " [", item.value.type, "]");
@@ -97,28 +103,19 @@ export class TopicStore {
 
     async getPath(topic: Topic): Promise<Topic[]> {
         console.log('getPath', topic.uid, topic.name);
-    
+
         if (topic.parent === TOPIC_ROOT_PARENT) {
             return [topic];
         }
-        
+
         const parentPath = await this.getPathById(topic.parent);
         const completePath = [...parentPath, topic];
-        
+
         console.log('getPath', topic.uid, topic.name, 'path:', completePath);
         return completePath;
     }
 
-    async getByName(name: string, parentUid?: string): Promise<Topic | null> {
-        const topic = null;
-        return topic;
-    }
 
-
-    async getPathString(topic: Topic): Promise<string> {
-        const pathString = '';
-        return pathString;
-    }
 
     async createTopic(name: string, parentUid: string): Promise<Topic | null> {
         if (!account.get()) {
