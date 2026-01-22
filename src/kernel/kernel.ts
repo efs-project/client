@@ -1,6 +1,7 @@
 import { EfsShell } from '../shell/shell.js';
 import { EFS } from '../libefs';
 import { ethersProvider } from './wallet.js';
+import '../web-awesome.js';
 
 console.log('kernel.ts running');
 

@@ -1,28 +1,26 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EFS prototype via Vite + Lit + TS</title>
 
-    <!-- Web Awesome autoloader -->
-    <link rel="stylesheet" href="https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/styles/themes/default.css" />
-    <!-- Need to manually include wa-comps inside of our components <script type="module" src="https://early.webawesome.com/webawesome@3.0.0-alpha.7/dist/webawesome.loader.js"></script> -->
-    <!-- Web Awesome native styles -->
-    <link rel="stylesheet" href="https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/styles/webawesome.css" />
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EFS prototype via Vite + Lit + TS</title>
 
-    <script type="module">
-      import { init, Kernel } from '/src/kernel/kernel.ts';
 
-      document.addEventListener('DOMContentLoaded', () => {
-        init();
-        window.kernel = Kernel;
-       });
-    </script>
+  <script type="module">
+    import { init, Kernel } from '/src/kernel/kernel.ts';
 
-  </head>
-  <body>
-    <noscript>JavaScript is required for EFS to run</noscript>
+    document.addEventListener('DOMContentLoaded', () => {
+      init();
+      window.kernel = Kernel;
+    });
+  </script>
+
+</head>
+
+<body>
+  <noscript>JavaScript is required for EFS to run</noscript>
 </body>
+
 </html>

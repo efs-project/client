@@ -1,27 +1,22 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
-import { SignalWatcher, signal } from '@lit-labs/signals';
-import { Kernel } from '../../kernel/kernel';
+import { SignalWatcher } from '@lit-labs/signals';
 import { currentTopic } from '../../shell/shell';
 
 // Import Web Awesome components
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/card/card.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/spinner/spinner.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/divider/divider.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/tab-group/tab-group.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/tab/tab.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/tab-panel/tab-panel.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/button/button.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/avatar/avatar.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/format-date/format-date.js';
+import '@awesome.me/webawesome/dist/components/card/card.js';
+import '@awesome.me/webawesome/dist/components/spinner/spinner.js';
+import '@awesome.me/webawesome/dist/components/divider/divider.js';
+import '@awesome.me/webawesome/dist/components/tab-group/tab-group.js';
+import '@awesome.me/webawesome/dist/components/tab/tab.js';
+import '@awesome.me/webawesome/dist/components/tab-panel/tab-panel.js';
+import '@awesome.me/webawesome/dist/components/button/button.js';
+import '@awesome.me/webawesome/dist/components/avatar/avatar.js';
+import '@awesome.me/webawesome/dist/components/format-date/format-date.js';
 
-import { 
-  EFS, 
-  Topic, 
-  TopicStore, 
-  isAttestationIndexed, 
-  getReferencingAttestationUIDs, 
-  getAttestationItems 
+import {
+  getReferencingAttestationUIDs,
+  getAttestationItems
 } from '../../libefs';
 
 // Schema UID for messages
@@ -39,7 +34,7 @@ interface Message {
 }
 
 // Current state signal
-const count = signal(0);
+// const count = signal(0);
 
 @customElement('efs-browser')
 export class EfsBrowser extends SignalWatcher(LitElement) {
@@ -102,24 +97,24 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
     }
   `;
 
-  private efs: EFS;
-  
+  // private efs: EFS;
+
   @state()
   private loading: boolean = false;
-  
+
   @state()
   private messages: Message[] = [];
-  
+
   @state()
   private activeTab: string = 'info';
-  
+
   // Track the last loaded topic to prevent infinite loops
   private lastLoadedTopicUid: string = '';
 
   constructor() {
     super();
     // Initialize EFS with the appropriate address
-    this.efs = Kernel.EFS;
+    // this.efs = Kernel.EFS;
   }
 
   // Called after first update and on each signal update
@@ -133,7 +128,7 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
 
   render() {
     const topic = currentTopic.get();
-    
+
     return html`
       <div class="messages-container">
         <wa-tab-group>
@@ -167,9 +162,9 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
       </div>
     `;
   }
-  
+
   // Helper function to render a single message with its replies
-  renderMessage(message: Message, isReply: boolean = false): import('lit').TemplateResult {
+  renderMessage(message: Message, _isReply: boolean = false): import('lit').TemplateResult {
     return html`
       <wa-card class="message-card">
         <div class="message-header">
@@ -197,20 +192,20 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
       ${message.children.length > 0 ? html`
         <div class="message-replies">
           ${message.children
-            .sort((a, b) => a.timestamp - b.timestamp)
-            .map(reply => this.renderMessage(reply, true))}
+          .sort((a, b) => a.timestamp - b.timestamp)
+          .map(reply => this.renderMessage(reply, true))}
         </div>
       ` : ''}
     `;
   }
-  
+
   // Handle reply button click
   handleReply(message: Message) {
     console.log('Reply to message:', message);
     // In a real implementation, this would open a reply form
     // and ultimately create a new message attestation with parent = message.uid
   }
-  
+
   // Handle like button click
   handleLike(message: Message) {
     console.log('Liked message:', message);
@@ -218,40 +213,40 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
     // referencing the message
   }
 
-  async #onClick() {
-    count.set(count.get() + 1);
+  //   async #onClick() {
+  //     count.set(count.get() + 1);
+  //
+  //     // TODO: Move me somewhere else
+  //     // const uid = "0x6e4851b1ee4ee826a06a4514895640816b4143bf2408c33e5c1263275daf53ce";
+  //
+  //     // const uid = "0x21792c13ed1e2b20c3827ec68c644dd8a79b9c137c6e2f21aa9ccc9cafc1b7a5"; // Bryce's attestation
+  //     // const schema = "0xb96446c85ce538c1641a967f23ea11bbb4a390ef745fc5a9905689dbd48bac86"; // Schema of Dahk's attestation
+  //     // getAttestation(uid);
+  //     // const isIndexed = await eas.isAttestationIndexed(uid);
+  //     // const refCount = await eas.getReferencingAttestationUIDCount(uid, schema);
+  //     // const refUIDs = await eas.getReferencingAttestationUIDs(uid, schema);
+  //     // console.log('isIndexed', isIndexed);
+  //     // console.log('refCount', refCount);
+  //     // console.log('refUIDs', refUIDs);
+  //
+  //     // // foreach ref in refUIDs call getAttestation(ref)
+  //     // refUIDs.forEach(async (ref) => {
+  //     //   getAttestation(ref);
+  //     // });
+  //
+  //
+  //     //console.log('Attestation tree:', this.stringifyWithBigInt(attestationTree));
+  //     //console.table(attestationTree);
+  //   }
 
-    // TODO: Move me somewhere else
-    // const uid = "0x6e4851b1ee4ee826a06a4514895640816b4143bf2408c33e5c1263275daf53ce";
-
-    // const uid = "0x21792c13ed1e2b20c3827ec68c644dd8a79b9c137c6e2f21aa9ccc9cafc1b7a5"; // Bryce's attestation
-    // const schema = "0xb96446c85ce538c1641a967f23ea11bbb4a390ef745fc5a9905689dbd48bac86"; // Schema of Dahk's attestation
-    // getAttestation(uid);
-    // const isIndexed = await eas.isAttestationIndexed(uid);
-    // const refCount = await eas.getReferencingAttestationUIDCount(uid, schema);
-    // const refUIDs = await eas.getReferencingAttestationUIDs(uid, schema);
-    // console.log('isIndexed', isIndexed);
-    // console.log('refCount', refCount);
-    // console.log('refUIDs', refUIDs);
-
-    // // foreach ref in refUIDs call getAttestation(ref)
-    // refUIDs.forEach(async (ref) => {
-    //   getAttestation(ref);
-    // });
-
-
-    //console.log('Attestation tree:', this.stringifyWithBigInt(attestationTree));
-    //console.table(attestationTree);
-  }
-
-  private stringifyWithBigInt(obj: any): string {
-    return JSON.stringify(obj, (key, value) => {
-      if (typeof value === 'bigint') {
-        return value.toString();
-      }
-      return value;
-    }, 2);
-  }
+  //   private stringifyWithBigInt(obj: any): string {
+  //     return JSON.stringify(obj, (_key, value) => {
+  //       if (typeof value === 'bigint') {
+  //         return value.toString();
+  //       }
+  //       return value;
+  //     }, 2);
+  //   }
 
 
   // Load messages for the current topic
@@ -259,15 +254,15 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
     try {
       this.loading = true;
       console.log(`Loading messages for topic: ${topicUid}`);
-      
+
       // Get messages that reference this topic using the message schema
       const messageUIDs = await getReferencingAttestationUIDs(topicUid, MESSAGE_SCHEMA);
       console.log(`Found ${messageUIDs.length} messages for topic ${topicUid}`);
-      
+
       // Process each message
       const topLevelMessages: Message[] = [];
       const messageMap = new Map<string, Message>();
-      
+
       // First pass - create message objects
       for (const uid of messageUIDs) {
         const message = await this.processMessage(uid, topicUid);
@@ -275,7 +270,7 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
           messageMap.set(message.uid, message);
         }
       }
-      
+
       // Second pass - build the message tree
       for (const message of messageMap.values()) {
         if (!message.parent) {
@@ -289,10 +284,10 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
           }
         }
       }
-      
+
       // Sort by timestamp (newest first)
       topLevelMessages.sort((a, b) => b.timestamp - a.timestamp);
-      
+
       // Update the component state
       this.messages = topLevelMessages;
     } catch (error) {
@@ -301,18 +296,18 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
       this.loading = false;
     }
   }
-  
+
   // Process a single message attestation
   async processMessage(uid: string, topicUid: string): Promise<Message | null> {
     try {
       const items = await getAttestationItems(uid);
-      
+
       // Extract message data from attestation items
       const content = items.find(item => item.name === 'message')?.value?.toString() || '';
       const author = items.find(item => item.name === 'author')?.value?.toString() || 'Anonymous';
       const timestamp = Number(items.find(item => item.name === 'timestamp')?.value || Date.now());
       const parent = items.find(item => item.name === 'parent')?.value?.toString();
-      
+
       return {
         uid,
         content,

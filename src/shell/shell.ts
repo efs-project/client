@@ -1,15 +1,15 @@
-import {LitElement, html, css} from 'lit';
-import {customElement} from 'lit/decorators.js';
-import {SignalWatcher, signal} from '@lit-labs/signals';
-import {Kernel} from '../kernel/kernel';
-import {EFS, EASx, Topic, TopicStore, TOPIC_ROOT} from '../libefs';
+import { LitElement, html, css } from 'lit';
+import { customElement } from 'lit/decorators.js';
+import { SignalWatcher, signal } from '@lit-labs/signals';
+import { Kernel } from '../kernel/kernel';
+import { EFS, Topic, TopicStore, TOPIC_ROOT } from '../libefs';
 import { account, connectWallet } from '../kernel/wallet';
 import './topic-tree.js';
 import './topic-breadcrumb.js';
 import '../apps/browser/browser.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/switch/switch.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/page/page.js';
-import 'https://early.webawesome.com/webawesome@3.0.0-alpha.13/dist/components/button/button.js';
+import '@awesome.me/webawesome/dist/components/switch/switch.js';
+// wa-page is not available in the npm package, replacing with custom layout
+import '@awesome.me/webawesome/dist/components/button/button.js';
 
 
 const DEFAULT_TOPIC: Topic = {
@@ -23,10 +23,62 @@ export const currentTopic = signal<Topic>(DEFAULT_TOPIC);
 @customElement('efs-shell')
 export class EfsShell extends SignalWatcher(LitElement) {
   static styles = css`
-    header[slot="header"] {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+    :host {
+      display: block;
+      height: 100vh;
+      --sidebar-width: 250px;
+    }
+
+    .page {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background-color: var(--wa-color-surface-default);
+      color: var(--wa-color-text-normal);
+    }
+
+    .header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 1rem;
+      border-bottom: 1px solid var(--wa-color-surface-border);
+      background-color: var(--wa-color-surface-default);
+    }
+
+    .main-body {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: var(--sidebar-width);
+      border-right: 1px solid var(--wa-color-surface-border);
+      overflow-y: auto;
+      padding: 1rem;
+      background-color: var(--wa-color-surface-lowered);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .content-area {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .main-header {
+      padding: 1rem;
+      border-bottom: 1px solid var(--wa-color-surface-border);
+      font-weight: bold;
+    }
+
+    main {
+      flex: 1;
+      padding: 1rem;
     }
     
     wa-button.wallet-button {
@@ -67,7 +119,7 @@ export class EfsShell extends SignalWatcher(LitElement) {
   private systemDark = window.matchMedia('(prefers-color-scheme: dark)');
 
   private efs: EFS;
-  private eas: EASx;
+  // private eas: EASx;
   private topicStore: TopicStore;
 
   constructor() {
@@ -77,7 +129,7 @@ export class EfsShell extends SignalWatcher(LitElement) {
     this.#applyDark();
 
     this.efs = Kernel.EFS;
-    this.eas = this.efs.EAS;
+    // this.eas = this.efs.EAS;
     this.topicStore = this.efs.TopicStore;
     this.topicStore.getById(TOPIC_ROOT).then((topic) => {
       if (topic) {
@@ -95,8 +147,8 @@ export class EfsShell extends SignalWatcher(LitElement) {
     const walletAddress = account.get();
 
     return html`
-      <wa-page mobile-breakpoint="50ch">
-        <header slot="header">
+      <div class="page">
+        <header class="header-bar">
           <efs-topic-breadcrumb></efs-topic-breadcrumb>
           <div>
             <wa-switch ?checked=${this.isDarkScheme} @change=${this.#switchClick}>Dark mode</wa-switch>
@@ -111,15 +163,21 @@ export class EfsShell extends SignalWatcher(LitElement) {
             </wa-button>
           </div>
         </header>
-        <header slot=main-header>EFS Browser (main-header)</header>
-        <div slot=navigation>
-          Topic Tree (navigation)
-          <efs-topic-tree></efs-topic-tree>
+
+        <div class="main-body">
+          <nav class="sidebar">
+            <div>Topic Tree (navigation)</div>
+            <efs-topic-tree></efs-topic-tree>
+          </nav>
+          
+          <div class="content-area">
+            <header class="main-header">EFS Browser (main-header)</header>
+            <main>
+              <efs-browser></efs-browser>
+            </main>
+          </div>
         </div>
-        <main>
-          <efs-browser></efs-browser>
-        </main>
-      </wa-page>
+      </div>
     `;
   }
 
