@@ -21,7 +21,8 @@ if (!fs.existsSync(genDir)) {
 }
 
 const destFile = path.join(genDir, 'deployedContracts.ts');
-fs.copyFileSync(sourceFile, destFile);
+const sourceContent = fs.readFileSync(sourceFile, 'utf8');
+fs.writeFileSync(destFile, '// @ts-nocheck\n' + sourceContent);
 
 console.log(`✅ Successfully synced local ABIs`);
 console.log(`   FROM: ${sourceFile}`);

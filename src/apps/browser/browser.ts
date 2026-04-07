@@ -14,13 +14,10 @@ import '@awesome.me/webawesome/dist/components/button/button.js';
 import '@awesome.me/webawesome/dist/components/avatar/avatar.js';
 import '@awesome.me/webawesome/dist/components/format-date/format-date.js';
 
-import {
-  getReferencingAttestationUIDs,
-  getAttestationItems
-} from '../../libefs';
+import { getReferencingAttestationUIDs, getAttestationItems } from '../../libefs';
 
 // Schema UID for messages
-const MESSAGE_SCHEMA = "0x3969bb076acfb992af54d51274c5c868641ca5344e1aacd0b1f5e4f80ac0822f";
+const MESSAGE_SCHEMA = '0x3969bb076acfb992af54d51274c5c868641ca5344e1aacd0b1f5e4f80ac0822f';
 
 // Interface for message data structure
 interface Message {
@@ -42,42 +39,42 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
     .card-image {
       max-width: 200px;
     }
-    
+
     .messages-container {
       padding: 1rem;
     }
-    
+
     .message-card {
       margin-bottom: 1rem;
       border-radius: 8px;
       overflow: hidden;
     }
-    
+
     .message-header {
       display: flex;
       align-items: center;
       gap: 0.5rem;
       margin-bottom: 0.5rem;
     }
-    
+
     .message-author {
       font-weight: bold;
     }
-    
+
     .message-time {
       color: var(--wa-color-neutral-500);
       font-size: 0.8rem;
     }
-    
+
     .message-content {
       margin-bottom: 1rem;
     }
-    
+
     .message-actions {
       display: flex;
       gap: 0.5rem;
     }
-    
+
     .message-replies {
       margin-left: 2rem;
       border-left: 2px solid var(--wa-color-neutral-200);
@@ -89,7 +86,7 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
       justify-content: center;
       padding: 2rem;
     }
-    
+
     .empty-state {
       text-align: center;
       padding: 2rem;
@@ -132,33 +129,42 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
     return html`
       <div class="messages-container">
         <wa-tab-group>
-          <wa-tab ?active=${this.activeTab === 'messages'} @click=${() => this.activeTab = 'messages'}>Messages</wa-tab>
-          <wa-tab ?active=${this.activeTab === 'info'} @click=${() => this.activeTab = 'info'}>Topic Info</wa-tab>
+          <wa-tab
+            ?active=${this.activeTab === 'messages'}
+            @click=${() => (this.activeTab = 'messages')}
+            >Messages</wa-tab
+          >
+          <wa-tab ?active=${this.activeTab === 'info'} @click=${() => (this.activeTab = 'info')}
+            >Topic Info</wa-tab
+          >
         </wa-tab-group>
-        
-        ${this.activeTab === 'messages' ? html`
-          <div class="messages-panel">
-            
-            ${this.loading ? html`
-              <div class="loading-container">
-                <wa-spinner></wa-spinner>
+
+        ${this.activeTab === 'messages'
+          ? html`
+              <div class="messages-panel">
+                ${this.loading
+                  ? html`
+                      <div class="loading-container">
+                        <wa-spinner></wa-spinner>
+                      </div>
+                    `
+                  : this.messages.length === 0
+                    ? html`
+                        <div class="empty-state">
+                          <p>No messages found for this topic.</p>
+                        </div>
+                      `
+                    : html` ${this.messages.map((message) => this.renderMessage(message))} `}
               </div>
-            ` : this.messages.length === 0 ? html`
-              <div class="empty-state">
-                <p>No messages found for this topic.</p>
+            `
+          : html`
+              <div class="info-panel">
+                <h2>Topic Information</h2>
+                <p>UID: ${topic?.uid || 'Unknown'}</p>
+                <p>Name: ${topic?.name || 'Unknown'}</p>
+                <p>Parent: ${topic?.parent || 'None'}</p>
               </div>
-            ` : html`
-              ${this.messages.map(message => this.renderMessage(message))}
             `}
-          </div>
-        ` : html`
-          <div class="info-panel">
-            <h2>Topic Information</h2>
-            <p>UID: ${topic?.uid || 'Unknown'}</p>
-            <p>Name: ${topic?.name || 'Unknown'}</p>
-            <p>Parent: ${topic?.parent || 'None'}</p>
-          </div>
-        `}
       </div>
     `;
   }
@@ -171,14 +177,17 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
           <wa-avatar name=${message.author} size="small"></wa-avatar>
           <span class="message-author">${message.author}</span>
           <span class="message-time">
-            <wa-format-date date="${new Date(message.timestamp).toISOString()}" month="short" day="numeric" year="numeric"></wa-format-date>
+            <wa-format-date
+              date="${new Date(message.timestamp).toISOString()}"
+              month="short"
+              day="numeric"
+              year="numeric"
+            ></wa-format-date>
           </span>
         </div>
-        
-        <div class="message-content">
-          ${message.content}
-        </div>
-        
+
+        <div class="message-content">${message.content}</div>
+
         <div class="message-actions">
           <wa-button size="small" variant="text" @click=${() => this.handleReply(message)}>
             Reply
@@ -188,14 +197,16 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
           </wa-button>
         </div>
       </wa-card>
-      
-      ${message.children.length > 0 ? html`
-        <div class="message-replies">
-          ${message.children
-          .sort((a, b) => a.timestamp - b.timestamp)
-          .map(reply => this.renderMessage(reply, true))}
-        </div>
-      ` : ''}
+
+      ${message.children.length > 0
+        ? html`
+            <div class="message-replies">
+              ${message.children
+                .sort((a, b) => a.timestamp - b.timestamp)
+                .map((reply) => this.renderMessage(reply, true))}
+            </div>
+          `
+        : ''}
     `;
   }
 
@@ -247,7 +258,6 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
   //       return value;
   //     }, 2);
   //   }
-
 
   // Load messages for the current topic
   async loadMessagesForTopic(topicUid: string) {
@@ -303,10 +313,12 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
       const items = await getAttestationItems(uid);
 
       // Extract message data from attestation items
-      const content = items.find(item => item.name === 'message')?.value?.toString() || '';
-      const author = items.find(item => item.name === 'author')?.value?.toString() || 'Anonymous';
-      const timestamp = Number(items.find(item => item.name === 'timestamp')?.value || Date.now());
-      const parent = items.find(item => item.name === 'parent')?.value?.toString();
+      const content = items.find((item) => item.name === 'message')?.value?.toString() || '';
+      const author = items.find((item) => item.name === 'author')?.value?.toString() || 'Anonymous';
+      const timestamp = Number(
+        items.find((item) => item.name === 'timestamp')?.value || Date.now(),
+      );
+      const parent = items.find((item) => item.name === 'parent')?.value?.toString();
 
       return {
         uid,
@@ -315,7 +327,7 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
         timestamp,
         parent,
         referencedTopic: topicUid,
-        children: []
+        children: [],
       };
     } catch (error) {
       console.error(`Error processing message ${uid}:`, error);
@@ -323,7 +335,6 @@ export class EfsBrowser extends SignalWatcher(LitElement) {
     }
   }
 }
-
 
 declare global {
   interface HTMLElementTagNameMap {

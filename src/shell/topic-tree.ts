@@ -27,7 +27,7 @@ export class EfsTopicTree extends SignalWatcher(LitElement) {
       opacity: 0.7;
       transition: opacity 0.2s ease;
     }
-    
+
     wa-button.add-button::part(base) {
       padding: 0.25rem;
       border-radius: 0.25rem;
@@ -38,16 +38,16 @@ export class EfsTopicTree extends SignalWatcher(LitElement) {
       min-height: auto;
       min-width: auto;
     }
-    
+
     wa-button.add-button::part(base):hover {
       background-color: #f8f9fa;
       color: #495057;
     }
-    
+
     .topic-item:hover wa-button.add-button {
       opacity: 1;
     }
-    
+
     wa-button.add-button wa-icon {
       font-size: 0.75rem;
     }
@@ -78,10 +78,10 @@ export class EfsTopicTree extends SignalWatcher(LitElement) {
   }
 
   async initializeTopicTree() {
-    console.log("topic-tree.initializeTopicTree");
+    console.log('topic-tree.initializeTopicTree');
     try {
       if (!Kernel.EFS?.TopicStore) {
-        console.log("TopicStore not available yet, waiting...");
+        console.log('TopicStore not available yet, waiting...');
         setTimeout(() => this.initializeTopicTree(), 500);
         return;
       }
@@ -89,12 +89,12 @@ export class EfsTopicTree extends SignalWatcher(LitElement) {
       // Start with the root topic
       const rootTopic = await Kernel.EFS.TopicStore.getById(TOPIC_ROOT);
       if (!rootTopic) {
-        console.error("Root topic not found!");
+        console.error('Root topic not found!');
         return;
       }
 
       this.rootTopic = rootTopic;
-      console.log("Root topic loaded:", rootTopic);
+      console.log('Root topic loaded:', rootTopic);
 
       // Load children of the root topic
       await this.loadChildTopics(rootTopic.uid);
@@ -105,7 +105,7 @@ export class EfsTopicTree extends SignalWatcher(LitElement) {
         setTimeout(() => this.selectTopicInTree(topic.uid), 100);
       }
     } catch (error) {
-      console.error("Error initializing topic tree:", error);
+      console.error('Error initializing topic tree:', error);
     }
   }
 
@@ -148,7 +148,7 @@ export class EfsTopicTree extends SignalWatcher(LitElement) {
       // Clear any previous selections
       if (this.shadowRoot) {
         const allItems = this.shadowRoot.querySelectorAll('wa-tree-item');
-        allItems.forEach(item => {
+        allItems.forEach((item) => {
           item.removeAttribute('selected');
         });
       }
@@ -210,7 +210,7 @@ export class EfsTopicTree extends SignalWatcher(LitElement) {
 
     // Set as current topic if different
     if (topicId && topicId !== currentTopic.get().uid && Kernel.EFS?.TopicStore) {
-      Kernel.EFS.TopicStore.getById(topicId).then(topic => {
+      Kernel.EFS.TopicStore.getById(topicId).then((topic) => {
         if (topic) currentTopic.set(topic);
       });
     }
@@ -225,14 +225,14 @@ export class EfsTopicTree extends SignalWatcher(LitElement) {
       // Check if it *should* have children before attempting load
       // const topic = this.findTopic(topicId);
       // Use the same logic as isExpandable or fetch topic if needed to check
-      // For simplicity, let's try loading unconditionally for now, 
+      // For simplicity, let's try loading unconditionally for now,
       // but ideally, check if it's potentially expandable first.
       this.loadChildTopics(topicId);
     }
 
     // Set as current topic if different
     if (topicId && topicId !== currentTopic.get().uid && Kernel.EFS?.TopicStore) {
-      Kernel.EFS.TopicStore.getById(topicId).then(topic => {
+      Kernel.EFS.TopicStore.getById(topicId).then((topic) => {
         if (topic) {
           console.log('Setting current topic from span click:', topic.uid);
           currentTopic.set(topic);
@@ -249,21 +249,24 @@ export class EfsTopicTree extends SignalWatcher(LitElement) {
   async handleAddTopicClick(event: Event, parentTopicId: string) {
     event.stopPropagation();
     if (!account.get()) {
-      alert("Please connect your wallet first.");
+      alert('Please connect your wallet first.');
       return;
     }
 
-    const newTopicName = prompt("Enter the name for the new topic:");
+    const newTopicName = prompt('Enter the name for the new topic:');
 
-    if (newTopicName && newTopicName.trim() !== "") {
+    if (newTopicName && newTopicName.trim() !== '') {
       try {
         // URL encode the topic name for validation (simple check)
         if (encodeURIComponent(newTopicName.trim()) !== newTopicName.trim()) {
-          alert("Topic name contains invalid characters.");
+          alert('Topic name contains invalid characters.');
           return;
         }
 
-        const newTopic = await Kernel.EFS.TopicStore.createTopic(newTopicName.trim(), parentTopicId);
+        const newTopic = await Kernel.EFS.TopicStore.createTopic(
+          newTopicName.trim(),
+          parentTopicId,
+        );
 
         if (newTopic) {
           // Refresh the parent's children to include the new topic
@@ -272,12 +275,11 @@ export class EfsTopicTree extends SignalWatcher(LitElement) {
           currentTopic.set(newTopic);
         }
       } catch (error) {
-        console.error("Error creating new topic:", error);
-        alert("Failed to create new topic. See console for details.");
+        console.error('Error creating new topic:', error);
+        alert('Failed to create new topic. See console for details.');
       }
     }
   }
-
 
   render() {
     // Using the signal value in render makes this component
@@ -305,7 +307,8 @@ export class EfsTopicTree extends SignalWatcher(LitElement) {
 
     const children = this.childTopics.get(topicId) || [];
     const childrenLoaded = this.childTopics.has(topicId);
-    const isExpandable = (childrenLoaded && children.length > 0) || (!childrenLoaded && (topic as any).hasChildren);
+    const isExpandable =
+      (childrenLoaded && children.length > 0) || (!childrenLoaded && (topic as any).hasChildren);
 
     return html`
       <wa-tree-item
@@ -315,11 +318,18 @@ export class EfsTopicTree extends SignalWatcher(LitElement) {
       >
         <div class="topic-item">
           <span @click=${(e: Event) => this.#handleSpanClick(e, topic.uid)}>${topic.name}</span>
-          <wa-button class="add-button" size="small" variant="text" @click=${(e: Event) => this.handleAddTopicClick(e, topic.uid)}>
+          <wa-button
+            class="add-button"
+            size="small"
+            variant="text"
+            @click=${(e: Event) => this.handleAddTopicClick(e, topic.uid)}
+          >
             <wa-icon name="plus"></wa-icon>
           </wa-button>
         </div>
-        ${childrenLoaded && children.length > 0 ? children.map(child => this.renderTopicTree(child.uid, depth + 1)) : ''}
+        ${childrenLoaded && children.length > 0
+          ? children.map((child) => this.renderTopicTree(child.uid, depth + 1))
+          : ''}
       </wa-tree-item>
     `;
   }
@@ -330,7 +340,7 @@ export class EfsTopicTree extends SignalWatcher(LitElement) {
 
     // Search within the loaded children
     for (const children of this.childTopics.values()) {
-      const found = children.find(child => child.uid === topicId);
+      const found = children.find((child) => child.uid === topicId);
       if (found) return found;
     }
 

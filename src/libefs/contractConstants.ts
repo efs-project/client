@@ -3,976 +3,985 @@
 // Do not edit manually.
 
 export const SCHEMAS = {
-  TOPIC: "0x9932ce5abc3a7cf027b4c9e57538dd6792fdf2c21f2c0a54323cb675bd598ccd",
-  TAG: "0xfbac3974190253fb770d6b865f3de6511e38f3f9fb614e8aec40000d164410ff",
-  PROPERTY: "0xa422bce1dd3569b26500b1f1e21ef458e4707c54fb849ec841c99ab6602ba793",
-  FILE: "0x4364311f2d46c7401fc99ca7a5940714928e2f5a7f06c513000e198fc3184be4",
-  BLOB: "0x775f8a935ab74e7393050a8e32a76e9ed34f05a71db403581ed5069d1504f3c5",
+  TOPIC: '0x9932ce5abc3a7cf027b4c9e57538dd6792fdf2c21f2c0a54323cb675bd598ccd',
+  TAG: '0xfbac3974190253fb770d6b865f3de6511e38f3f9fb614e8aec40000d164410ff',
+  PROPERTY: '0xa422bce1dd3569b26500b1f1e21ef458e4707c54fb849ec841c99ab6602ba793',
+  FILE: '0x4364311f2d46c7401fc99ca7a5940714928e2f5a7f06c513000e198fc3184be4',
+  BLOB: '0x775f8a935ab74e7393050a8e32a76e9ed34f05a71db403581ed5069d1504f3c5',
 } as const;
 
-export const TOPIC_SCHEMA = "0x9932ce5abc3a7cf027b4c9e57538dd6792fdf2c21f2c0a54323cb675bd598ccd"; // Legacy support
-export const TOPIC_ROOT_PARENT = "0x0000000000000000000000000000000000000000000000000000000000000000";
-export const TOPIC_ROOT = "0xd42c64ef6aa1716e32d675dc63dc52b444f499691666563e2c1c539d197e0ec9";
+export const TOPIC_SCHEMA = '0x9932ce5abc3a7cf027b4c9e57538dd6792fdf2c21f2c0a54323cb675bd598ccd'; // Legacy support
+export const TOPIC_ROOT_PARENT =
+  '0x0000000000000000000000000000000000000000000000000000000000000000';
+export const TOPIC_ROOT = '0xd42c64ef6aa1716e32d675dc63dc52b444f499691666563e2c1c539d197e0ec9';
 
-const localContractsImport: any = import.meta.glob('./generated/deployedContracts.ts', { eager: true });
+const localContractsImport: any = import.meta.glob('./generated/deployedContracts.ts', {
+  eager: true,
+});
 const localContractsPath = './generated/deployedContracts.ts';
-const localContracts = localContractsImport[localContractsPath]?.default || localContractsImport[localContractsPath]?.deployedContracts;
+const localContracts =
+  localContractsImport[localContractsPath]?.default ||
+  localContractsImport[localContractsPath]?.deployedContracts;
 
-const isLocal = import.meta.env?.VITE_CHAIN_ID === '31337' || import.meta.env?.VITE_NETWORK === 'localhost';
+const isLocal =
+  import.meta.env?.VITE_CHAIN_ID === '31337' || import.meta.env?.VITE_NETWORK === 'localhost';
 
-export const INDEXER_ADDRESS = isLocal && localContracts ? localContracts[31337].EFSIndexer.address : "0xdc8832f7bc16bE8a97E6c7cB66f912B6922246B5";
-export const TOPIC_RESOLVER_ADDRESS = "0xc1ec8B65bb137602963f88eb063fa7236f4744f2";
+export const INDEXER_ADDRESS =
+  isLocal && localContracts
+    ? localContracts[31337].EFSIndexer.address
+    : '0xdc8832f7bc16bE8a97E6c7cB66f912B6922246B5';
+export const TOPIC_RESOLVER_ADDRESS = '0xc1ec8B65bb137602963f88eb063fa7236f4744f2';
 
 export const RESOLVERS = {
-  TOPIC: "0xc1ec8B65bb137602963f88eb063fa7236f4744f2",
-  TAG: "0xff45Fcd36E04C07b53D909b00E915837fD1E3234",
-  PROPERTY: "0x9841806AC68865af1FDE1033e04cC4241D4f911b",
-  FILE: "0x71cEE012bA3B9642277f189c2C26488cAA28CF13",
-  BLOB: "0x79cA020FeE712048cAA49De800B4606cC516A331",
+  TOPIC: '0xc1ec8B65bb137602963f88eb063fa7236f4744f2',
+  TAG: '0xff45Fcd36E04C07b53D909b00E915837fD1E3234',
+  PROPERTY: '0x9841806AC68865af1FDE1033e04cC4241D4f911b',
+  FILE: '0x71cEE012bA3B9642277f189c2C26488cAA28CF13',
+  BLOB: '0x79cA020FeE712048cAA49De800B4606cC516A331',
 } as const;
 
 export const INDEXER_ABI = [
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "contract IEAS",
-        "name": "eas",
-        "type": "address"
+        internalType: 'contract IEAS',
+        name: 'eas',
+        type: 'address',
       },
       {
-        "internalType": "address",
-        "name": "prevIndexer",
-        "type": "address"
-      }
+        internalType: 'address',
+        name: 'prevIndexer',
+        type: 'address',
+      },
     ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
+    stateMutability: 'nonpayable',
+    type: 'constructor',
   },
   {
-    "inputs": [],
-    "name": "InvalidAttestation",
-    "type": "error"
+    inputs: [],
+    name: 'InvalidAttestation',
+    type: 'error',
   },
   {
-    "inputs": [],
-    "name": "InvalidEAS",
-    "type": "error"
+    inputs: [],
+    name: 'InvalidEAS',
+    type: 'error',
   },
   {
-    "inputs": [],
-    "name": "InvalidOffset",
-    "type": "error"
+    inputs: [],
+    name: 'InvalidOffset',
+    type: 'error',
   },
   {
-    "anonymous": false,
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "indexed": true,
-        "internalType": "bytes32",
-        "name": "uid",
-        "type": "bytes32"
-      }
+        indexed: true,
+        internalType: 'bytes32',
+        name: 'uid',
+        type: 'bytes32',
+      },
     ],
-    "name": "Indexed",
-    "type": "event"
+    name: 'Indexed',
+    type: 'event',
   },
   {
-    "inputs": [],
-    "name": "getEAS",
-    "outputs": [
+    inputs: [],
+    name: 'getEAS',
+    outputs: [
       {
-        "internalType": "contract IEAS",
-        "name": "",
-        "type": "address"
-      }
+        internalType: 'contract IEAS',
+        name: '',
+        type: 'address',
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: 'view',
+    type: 'function',
   },
   {
-    "inputs": [],
-    "name": "getPrevIndexer",
-    "outputs": [
+    inputs: [],
+    name: 'getPrevIndexer',
+    outputs: [
       {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: 'view',
+    type: 'function',
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "address",
-        "name": "recipient",
-        "type": "address"
+        internalType: 'address',
+        name: 'recipient',
+        type: 'address',
       },
       {
-        "internalType": "bytes32",
-        "name": "schemaUID",
-        "type": "bytes32"
-      }
+        internalType: 'bytes32',
+        name: 'schemaUID',
+        type: 'bytes32',
+      },
     ],
-    "name": "getReceivedAttestationUIDCount",
-    "outputs": [
+    name: 'getReceivedAttestationUIDCount',
+    outputs: [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: 'view',
+    type: 'function',
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "address",
-        "name": "recipient",
-        "type": "address"
+        internalType: 'address',
+        name: 'recipient',
+        type: 'address',
       },
       {
-        "internalType": "bytes32",
-        "name": "schemaUID",
-        "type": "bytes32"
+        internalType: 'bytes32',
+        name: 'schemaUID',
+        type: 'bytes32',
       },
       {
-        "internalType": "uint256",
-        "name": "start",
-        "type": "uint256"
+        internalType: 'uint256',
+        name: 'start',
+        type: 'uint256',
       },
       {
-        "internalType": "uint256",
-        "name": "length",
-        "type": "uint256"
+        internalType: 'uint256',
+        name: 'length',
+        type: 'uint256',
       },
       {
-        "internalType": "bool",
-        "name": "reverseOrder",
-        "type": "bool"
-      }
+        internalType: 'bool',
+        name: 'reverseOrder',
+        type: 'bool',
+      },
     ],
-    "name": "getReceivedAttestationUIDs",
-    "outputs": [
+    name: 'getReceivedAttestationUIDs',
+    outputs: [
       {
-        "internalType": "bytes32[]",
-        "name": "",
-        "type": "bytes32[]"
-      }
+        internalType: 'bytes32[]',
+        name: '',
+        type: 'bytes32[]',
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: 'view',
+    type: 'function',
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "bytes32",
-        "name": "attestionUID",
-        "type": "bytes32"
+        internalType: 'bytes32',
+        name: 'attestionUID',
+        type: 'bytes32',
       },
       {
-        "internalType": "bytes32",
-        "name": "schemaUID",
-        "type": "bytes32"
+        internalType: 'bytes32',
+        name: 'schemaUID',
+        type: 'bytes32',
       },
       {
-        "internalType": "address",
-        "name": "attester",
-        "type": "address"
-      }
+        internalType: 'address',
+        name: 'attester',
+        type: 'address',
+      },
     ],
-    "name": "getReferencingAttestationUIDByAddressCount",
-    "outputs": [
+    name: 'getReferencingAttestationUIDByAddressCount',
+    outputs: [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: 'view',
+    type: 'function',
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "bytes32",
-        "name": "attestionUID",
-        "type": "bytes32"
+        internalType: 'bytes32',
+        name: 'attestionUID',
+        type: 'bytes32',
       },
       {
-        "internalType": "bytes32",
-        "name": "schemaUID",
-        "type": "bytes32"
-      }
+        internalType: 'bytes32',
+        name: 'schemaUID',
+        type: 'bytes32',
+      },
     ],
-    "name": "getReferencingAttestationUIDCount",
-    "outputs": [
+    name: 'getReferencingAttestationUIDCount',
+    outputs: [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: 'view',
+    type: 'function',
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "bytes32",
-        "name": "attestionUID",
-        "type": "bytes32"
+        internalType: 'bytes32',
+        name: 'attestionUID',
+        type: 'bytes32',
       },
       {
-        "internalType": "bytes32",
-        "name": "schemaUID",
-        "type": "bytes32"
+        internalType: 'bytes32',
+        name: 'schemaUID',
+        type: 'bytes32',
       },
       {
-        "internalType": "uint256",
-        "name": "start",
-        "type": "uint256"
+        internalType: 'uint256',
+        name: 'start',
+        type: 'uint256',
       },
       {
-        "internalType": "uint256",
-        "name": "length",
-        "type": "uint256"
+        internalType: 'uint256',
+        name: 'length',
+        type: 'uint256',
       },
       {
-        "internalType": "bool",
-        "name": "reverseOrder",
-        "type": "bool"
-      }
+        internalType: 'bool',
+        name: 'reverseOrder',
+        type: 'bool',
+      },
     ],
-    "name": "getReferencingAttestationUIDs",
-    "outputs": [
+    name: 'getReferencingAttestationUIDs',
+    outputs: [
       {
-        "internalType": "bytes32[]",
-        "name": "",
-        "type": "bytes32[]"
-      }
+        internalType: 'bytes32[]',
+        name: '',
+        type: 'bytes32[]',
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: 'view',
+    type: 'function',
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "bytes32",
-        "name": "attestionUID",
-        "type": "bytes32"
+        internalType: 'bytes32',
+        name: 'attestionUID',
+        type: 'bytes32',
       },
       {
-        "internalType": "bytes32",
-        "name": "schemaUID",
-        "type": "bytes32"
+        internalType: 'bytes32',
+        name: 'schemaUID',
+        type: 'bytes32',
       },
       {
-        "internalType": "address",
-        "name": "attester",
-        "type": "address"
+        internalType: 'address',
+        name: 'attester',
+        type: 'address',
       },
       {
-        "internalType": "uint256",
-        "name": "start",
-        "type": "uint256"
+        internalType: 'uint256',
+        name: 'start',
+        type: 'uint256',
       },
       {
-        "internalType": "uint256",
-        "name": "length",
-        "type": "uint256"
+        internalType: 'uint256',
+        name: 'length',
+        type: 'uint256',
       },
       {
-        "internalType": "bool",
-        "name": "reverseOrder",
-        "type": "bool"
-      }
+        internalType: 'bool',
+        name: 'reverseOrder',
+        type: 'bool',
+      },
     ],
-    "name": "getReferencingAttestationUIDsByAddress",
-    "outputs": [
+    name: 'getReferencingAttestationUIDsByAddress',
+    outputs: [
       {
-        "internalType": "bytes32[]",
-        "name": "",
-        "type": "bytes32[]"
-      }
+        internalType: 'bytes32[]',
+        name: '',
+        type: 'bytes32[]',
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: 'view',
+    type: 'function',
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "bytes32",
-        "name": "schemaUID",
-        "type": "bytes32"
-      }
+        internalType: 'bytes32',
+        name: 'schemaUID',
+        type: 'bytes32',
+      },
     ],
-    "name": "getSchemaAttestationUIDCount",
-    "outputs": [
+    name: 'getSchemaAttestationUIDCount',
+    outputs: [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: 'view',
+    type: 'function',
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "bytes32",
-        "name": "schemaUID",
-        "type": "bytes32"
+        internalType: 'bytes32',
+        name: 'schemaUID',
+        type: 'bytes32',
       },
       {
-        "internalType": "uint256",
-        "name": "start",
-        "type": "uint256"
+        internalType: 'uint256',
+        name: 'start',
+        type: 'uint256',
       },
       {
-        "internalType": "uint256",
-        "name": "length",
-        "type": "uint256"
+        internalType: 'uint256',
+        name: 'length',
+        type: 'uint256',
       },
       {
-        "internalType": "bool",
-        "name": "reverseOrder",
-        "type": "bool"
-      }
+        internalType: 'bool',
+        name: 'reverseOrder',
+        type: 'bool',
+      },
     ],
-    "name": "getSchemaAttestationUIDs",
-    "outputs": [
+    name: 'getSchemaAttestationUIDs',
+    outputs: [
       {
-        "internalType": "bytes32[]",
-        "name": "",
-        "type": "bytes32[]"
-      }
+        internalType: 'bytes32[]',
+        name: '',
+        type: 'bytes32[]',
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: 'view',
+    type: 'function',
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "bytes32",
-        "name": "schemaUID",
-        "type": "bytes32"
+        internalType: 'bytes32',
+        name: 'schemaUID',
+        type: 'bytes32',
       },
       {
-        "internalType": "address",
-        "name": "attester",
-        "type": "address"
+        internalType: 'address',
+        name: 'attester',
+        type: 'address',
       },
       {
-        "internalType": "address",
-        "name": "recipient",
-        "type": "address"
-      }
+        internalType: 'address',
+        name: 'recipient',
+        type: 'address',
+      },
     ],
-    "name": "getSchemaAttesterRecipientAttestationUIDCount",
-    "outputs": [
+    name: 'getSchemaAttesterRecipientAttestationUIDCount',
+    outputs: [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: 'view',
+    type: 'function',
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "bytes32",
-        "name": "schemaUID",
-        "type": "bytes32"
+        internalType: 'bytes32',
+        name: 'schemaUID',
+        type: 'bytes32',
       },
       {
-        "internalType": "address",
-        "name": "attester",
-        "type": "address"
+        internalType: 'address',
+        name: 'attester',
+        type: 'address',
       },
       {
-        "internalType": "address",
-        "name": "recipient",
-        "type": "address"
+        internalType: 'address',
+        name: 'recipient',
+        type: 'address',
       },
       {
-        "internalType": "uint256",
-        "name": "start",
-        "type": "uint256"
+        internalType: 'uint256',
+        name: 'start',
+        type: 'uint256',
       },
       {
-        "internalType": "uint256",
-        "name": "length",
-        "type": "uint256"
+        internalType: 'uint256',
+        name: 'length',
+        type: 'uint256',
       },
       {
-        "internalType": "bool",
-        "name": "reverseOrder",
-        "type": "bool"
-      }
+        internalType: 'bool',
+        name: 'reverseOrder',
+        type: 'bool',
+      },
     ],
-    "name": "getSchemaAttesterRecipientAttestationUIDs",
-    "outputs": [
+    name: 'getSchemaAttesterRecipientAttestationUIDs',
+    outputs: [
       {
-        "internalType": "bytes32[]",
-        "name": "",
-        "type": "bytes32[]"
-      }
+        internalType: 'bytes32[]',
+        name: '',
+        type: 'bytes32[]',
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: 'view',
+    type: 'function',
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "address",
-        "name": "attester",
-        "type": "address"
+        internalType: 'address',
+        name: 'attester',
+        type: 'address',
       },
       {
-        "internalType": "bytes32",
-        "name": "schemaUID",
-        "type": "bytes32"
-      }
+        internalType: 'bytes32',
+        name: 'schemaUID',
+        type: 'bytes32',
+      },
     ],
-    "name": "getSentAttestationUIDCount",
-    "outputs": [
+    name: 'getSentAttestationUIDCount',
+    outputs: [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: 'view',
+    type: 'function',
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "address",
-        "name": "attester",
-        "type": "address"
+        internalType: 'address',
+        name: 'attester',
+        type: 'address',
       },
       {
-        "internalType": "bytes32",
-        "name": "schemaUID",
-        "type": "bytes32"
+        internalType: 'bytes32',
+        name: 'schemaUID',
+        type: 'bytes32',
       },
       {
-        "internalType": "uint256",
-        "name": "start",
-        "type": "uint256"
+        internalType: 'uint256',
+        name: 'start',
+        type: 'uint256',
       },
       {
-        "internalType": "uint256",
-        "name": "length",
-        "type": "uint256"
+        internalType: 'uint256',
+        name: 'length',
+        type: 'uint256',
       },
       {
-        "internalType": "bool",
-        "name": "reverseOrder",
-        "type": "bool"
-      }
+        internalType: 'bool',
+        name: 'reverseOrder',
+        type: 'bool',
+      },
     ],
-    "name": "getSentAttestationUIDs",
-    "outputs": [
+    name: 'getSentAttestationUIDs',
+    outputs: [
       {
-        "internalType": "bytes32[]",
-        "name": "",
-        "type": "bytes32[]"
-      }
+        internalType: 'bytes32[]',
+        name: '',
+        type: 'bytes32[]',
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: 'view',
+    type: 'function',
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "bytes32",
-        "name": "attestationUID",
-        "type": "bytes32"
-      }
+        internalType: 'bytes32',
+        name: 'attestationUID',
+        type: 'bytes32',
+      },
     ],
-    "name": "indexAttestation",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    name: 'indexAttestation',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "bytes32[]",
-        "name": "attestationUIDs",
-        "type": "bytes32[]"
-      }
+        internalType: 'bytes32[]',
+        name: 'attestationUIDs',
+        type: 'bytes32[]',
+      },
     ],
-    "name": "indexAttestations",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    name: 'indexAttestations',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "bytes32",
-        "name": "attestationUID",
-        "type": "bytes32"
-      }
+        internalType: 'bytes32',
+        name: 'attestationUID',
+        type: 'bytes32',
+      },
     ],
-    "name": "isAttestationIndexed",
-    "outputs": [
+    name: 'isAttestationIndexed',
+    outputs: [
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: 'view',
+    type: 'function',
   },
   {
-    "inputs": [],
-    "name": "version",
-    "outputs": [
+    inputs: [],
+    name: 'version',
+    outputs: [
       {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
-  }
+    stateMutability: 'view',
+    type: 'function',
+  },
 ] as const;
 
 export const TOPIC_RESOLVER_ABI = [
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "contract IEAS",
-        "name": "eas",
-        "type": "address"
-      }
+        internalType: 'contract IEAS',
+        name: 'eas',
+        type: 'address',
+      },
     ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
+    stateMutability: 'nonpayable',
+    type: 'constructor',
   },
   {
-    "inputs": [],
-    "name": "AccessDenied",
-    "type": "error"
+    inputs: [],
+    name: 'AccessDenied',
+    type: 'error',
   },
   {
-    "inputs": [],
-    "name": "InsufficientValue",
-    "type": "error"
+    inputs: [],
+    name: 'InsufficientValue',
+    type: 'error',
   },
   {
-    "inputs": [],
-    "name": "InvalidEAS",
-    "type": "error"
+    inputs: [],
+    name: 'InvalidEAS',
+    type: 'error',
   },
   {
-    "inputs": [],
-    "name": "InvalidLength",
-    "type": "error"
+    inputs: [],
+    name: 'InvalidLength',
+    type: 'error',
   },
   {
-    "inputs": [],
-    "name": "NotPayable",
-    "type": "error"
+    inputs: [],
+    name: 'NotPayable',
+    type: 'error',
   },
   {
-    "anonymous": false,
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "uid",
-        "type": "bytes32"
-      }
+        indexed: false,
+        internalType: 'bytes32',
+        name: 'uid',
+        type: 'bytes32',
+      },
     ],
-    "name": "RootTopicCreated",
-    "type": "event"
+    name: 'RootTopicCreated',
+    type: 'event',
   },
   {
-    "anonymous": false,
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "uid",
-        "type": "bytes32"
+        indexed: false,
+        internalType: 'bytes32',
+        name: 'uid',
+        type: 'bytes32',
       },
       {
-        "indexed": false,
-        "internalType": "string",
-        "name": "name",
-        "type": "string"
-      }
+        indexed: false,
+        internalType: 'string',
+        name: 'name',
+        type: 'string',
+      },
     ],
-    "name": "TopicCreated",
-    "type": "event"
+    name: 'TopicCreated',
+    type: 'event',
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "components": [
+        components: [
           {
-            "internalType": "bytes32",
-            "name": "uid",
-            "type": "bytes32"
+            internalType: 'bytes32',
+            name: 'uid',
+            type: 'bytes32',
           },
           {
-            "internalType": "bytes32",
-            "name": "schema",
-            "type": "bytes32"
+            internalType: 'bytes32',
+            name: 'schema',
+            type: 'bytes32',
           },
           {
-            "internalType": "uint64",
-            "name": "time",
-            "type": "uint64"
+            internalType: 'uint64',
+            name: 'time',
+            type: 'uint64',
           },
           {
-            "internalType": "uint64",
-            "name": "expirationTime",
-            "type": "uint64"
+            internalType: 'uint64',
+            name: 'expirationTime',
+            type: 'uint64',
           },
           {
-            "internalType": "uint64",
-            "name": "revocationTime",
-            "type": "uint64"
+            internalType: 'uint64',
+            name: 'revocationTime',
+            type: 'uint64',
           },
           {
-            "internalType": "bytes32",
-            "name": "refUID",
-            "type": "bytes32"
+            internalType: 'bytes32',
+            name: 'refUID',
+            type: 'bytes32',
           },
           {
-            "internalType": "address",
-            "name": "recipient",
-            "type": "address"
+            internalType: 'address',
+            name: 'recipient',
+            type: 'address',
           },
           {
-            "internalType": "address",
-            "name": "attester",
-            "type": "address"
+            internalType: 'address',
+            name: 'attester',
+            type: 'address',
           },
           {
-            "internalType": "bool",
-            "name": "revocable",
-            "type": "bool"
+            internalType: 'bool',
+            name: 'revocable',
+            type: 'bool',
           },
           {
-            "internalType": "bytes",
-            "name": "data",
-            "type": "bytes"
-          }
+            internalType: 'bytes',
+            name: 'data',
+            type: 'bytes',
+          },
         ],
-        "internalType": "struct Attestation",
-        "name": "attestation",
-        "type": "tuple"
-      }
+        internalType: 'struct Attestation',
+        name: 'attestation',
+        type: 'tuple',
+      },
     ],
-    "name": "attest",
-    "outputs": [
+    name: 'attest',
+    outputs: [
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
     ],
-    "stateMutability": "payable",
-    "type": "function"
+    stateMutability: 'payable',
+    type: 'function',
   },
   {
-    "inputs": [],
-    "name": "isPayable",
-    "outputs": [
+    inputs: [],
+    name: 'isPayable',
+    outputs: [
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
     ],
-    "stateMutability": "pure",
-    "type": "function"
+    stateMutability: 'pure',
+    type: 'function',
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "string",
-        "name": "_name",
-        "type": "string"
-      }
+        internalType: 'string',
+        name: '_name',
+        type: 'string',
+      },
     ],
-    "name": "isValidIriComponentForStorage",
-    "outputs": [
+    name: 'isValidIriComponentForStorage',
+    outputs: [
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
     ],
-    "stateMutability": "pure",
-    "type": "function"
+    stateMutability: 'pure',
+    type: 'function',
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "components": [
+        components: [
           {
-            "internalType": "bytes32",
-            "name": "uid",
-            "type": "bytes32"
+            internalType: 'bytes32',
+            name: 'uid',
+            type: 'bytes32',
           },
           {
-            "internalType": "bytes32",
-            "name": "schema",
-            "type": "bytes32"
+            internalType: 'bytes32',
+            name: 'schema',
+            type: 'bytes32',
           },
           {
-            "internalType": "uint64",
-            "name": "time",
-            "type": "uint64"
+            internalType: 'uint64',
+            name: 'time',
+            type: 'uint64',
           },
           {
-            "internalType": "uint64",
-            "name": "expirationTime",
-            "type": "uint64"
+            internalType: 'uint64',
+            name: 'expirationTime',
+            type: 'uint64',
           },
           {
-            "internalType": "uint64",
-            "name": "revocationTime",
-            "type": "uint64"
+            internalType: 'uint64',
+            name: 'revocationTime',
+            type: 'uint64',
           },
           {
-            "internalType": "bytes32",
-            "name": "refUID",
-            "type": "bytes32"
+            internalType: 'bytes32',
+            name: 'refUID',
+            type: 'bytes32',
           },
           {
-            "internalType": "address",
-            "name": "recipient",
-            "type": "address"
+            internalType: 'address',
+            name: 'recipient',
+            type: 'address',
           },
           {
-            "internalType": "address",
-            "name": "attester",
-            "type": "address"
+            internalType: 'address',
+            name: 'attester',
+            type: 'address',
           },
           {
-            "internalType": "bool",
-            "name": "revocable",
-            "type": "bool"
+            internalType: 'bool',
+            name: 'revocable',
+            type: 'bool',
           },
           {
-            "internalType": "bytes",
-            "name": "data",
-            "type": "bytes"
-          }
+            internalType: 'bytes',
+            name: 'data',
+            type: 'bytes',
+          },
         ],
-        "internalType": "struct Attestation[]",
-        "name": "attestations",
-        "type": "tuple[]"
+        internalType: 'struct Attestation[]',
+        name: 'attestations',
+        type: 'tuple[]',
       },
       {
-        "internalType": "uint256[]",
-        "name": "values",
-        "type": "uint256[]"
-      }
+        internalType: 'uint256[]',
+        name: 'values',
+        type: 'uint256[]',
+      },
     ],
-    "name": "multiAttest",
-    "outputs": [
+    name: 'multiAttest',
+    outputs: [
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
     ],
-    "stateMutability": "payable",
-    "type": "function"
+    stateMutability: 'payable',
+    type: 'function',
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "components": [
+        components: [
           {
-            "internalType": "bytes32",
-            "name": "uid",
-            "type": "bytes32"
+            internalType: 'bytes32',
+            name: 'uid',
+            type: 'bytes32',
           },
           {
-            "internalType": "bytes32",
-            "name": "schema",
-            "type": "bytes32"
+            internalType: 'bytes32',
+            name: 'schema',
+            type: 'bytes32',
           },
           {
-            "internalType": "uint64",
-            "name": "time",
-            "type": "uint64"
+            internalType: 'uint64',
+            name: 'time',
+            type: 'uint64',
           },
           {
-            "internalType": "uint64",
-            "name": "expirationTime",
-            "type": "uint64"
+            internalType: 'uint64',
+            name: 'expirationTime',
+            type: 'uint64',
           },
           {
-            "internalType": "uint64",
-            "name": "revocationTime",
-            "type": "uint64"
+            internalType: 'uint64',
+            name: 'revocationTime',
+            type: 'uint64',
           },
           {
-            "internalType": "bytes32",
-            "name": "refUID",
-            "type": "bytes32"
+            internalType: 'bytes32',
+            name: 'refUID',
+            type: 'bytes32',
           },
           {
-            "internalType": "address",
-            "name": "recipient",
-            "type": "address"
+            internalType: 'address',
+            name: 'recipient',
+            type: 'address',
           },
           {
-            "internalType": "address",
-            "name": "attester",
-            "type": "address"
+            internalType: 'address',
+            name: 'attester',
+            type: 'address',
           },
           {
-            "internalType": "bool",
-            "name": "revocable",
-            "type": "bool"
+            internalType: 'bool',
+            name: 'revocable',
+            type: 'bool',
           },
           {
-            "internalType": "bytes",
-            "name": "data",
-            "type": "bytes"
-          }
+            internalType: 'bytes',
+            name: 'data',
+            type: 'bytes',
+          },
         ],
-        "internalType": "struct Attestation[]",
-        "name": "attestations",
-        "type": "tuple[]"
+        internalType: 'struct Attestation[]',
+        name: 'attestations',
+        type: 'tuple[]',
       },
       {
-        "internalType": "uint256[]",
-        "name": "values",
-        "type": "uint256[]"
-      }
+        internalType: 'uint256[]',
+        name: 'values',
+        type: 'uint256[]',
+      },
     ],
-    "name": "multiRevoke",
-    "outputs": [
+    name: 'multiRevoke',
+    outputs: [
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
     ],
-    "stateMutability": "payable",
-    "type": "function"
+    stateMutability: 'payable',
+    type: 'function',
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "components": [
+        components: [
           {
-            "internalType": "bytes32",
-            "name": "uid",
-            "type": "bytes32"
+            internalType: 'bytes32',
+            name: 'uid',
+            type: 'bytes32',
           },
           {
-            "internalType": "bytes32",
-            "name": "schema",
-            "type": "bytes32"
+            internalType: 'bytes32',
+            name: 'schema',
+            type: 'bytes32',
           },
           {
-            "internalType": "uint64",
-            "name": "time",
-            "type": "uint64"
+            internalType: 'uint64',
+            name: 'time',
+            type: 'uint64',
           },
           {
-            "internalType": "uint64",
-            "name": "expirationTime",
-            "type": "uint64"
+            internalType: 'uint64',
+            name: 'expirationTime',
+            type: 'uint64',
           },
           {
-            "internalType": "uint64",
-            "name": "revocationTime",
-            "type": "uint64"
+            internalType: 'uint64',
+            name: 'revocationTime',
+            type: 'uint64',
           },
           {
-            "internalType": "bytes32",
-            "name": "refUID",
-            "type": "bytes32"
+            internalType: 'bytes32',
+            name: 'refUID',
+            type: 'bytes32',
           },
           {
-            "internalType": "address",
-            "name": "recipient",
-            "type": "address"
+            internalType: 'address',
+            name: 'recipient',
+            type: 'address',
           },
           {
-            "internalType": "address",
-            "name": "attester",
-            "type": "address"
+            internalType: 'address',
+            name: 'attester',
+            type: 'address',
           },
           {
-            "internalType": "bool",
-            "name": "revocable",
-            "type": "bool"
+            internalType: 'bool',
+            name: 'revocable',
+            type: 'bool',
           },
           {
-            "internalType": "bytes",
-            "name": "data",
-            "type": "bytes"
-          }
+            internalType: 'bytes',
+            name: 'data',
+            type: 'bytes',
+          },
         ],
-        "internalType": "struct Attestation",
-        "name": "attestation",
-        "type": "tuple"
-      }
+        internalType: 'struct Attestation',
+        name: 'attestation',
+        type: 'tuple',
+      },
     ],
-    "name": "revoke",
-    "outputs": [
+    name: 'revoke',
+    outputs: [
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
     ],
-    "stateMutability": "payable",
-    "type": "function"
+    stateMutability: 'payable',
+    type: 'function',
   },
   {
-    "inputs": [],
-    "name": "rootTopicUid",
-    "outputs": [
+    inputs: [],
+    name: 'rootTopicUid',
+    outputs: [
       {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: 'view',
+    type: 'function',
   },
   {
-    "inputs": [],
-    "name": "version",
-    "outputs": [
+    inputs: [],
+    name: 'version',
+    outputs: [
       {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: 'view',
+    type: 'function',
   },
   {
-    "stateMutability": "payable",
-    "type": "receive"
-  }
+    stateMutability: 'payable',
+    type: 'receive',
+  },
 ] as const;

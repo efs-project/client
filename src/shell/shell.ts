@@ -11,11 +11,10 @@ import '@awesome.me/webawesome/dist/components/switch/switch.js';
 // wa-page is not available in the npm package, replacing with custom layout
 import '@awesome.me/webawesome/dist/components/button/button.js';
 
-
 const DEFAULT_TOPIC: Topic = {
   uid: 'default',
   name: 'Loading...',
-  parent: ''
+  parent: '',
 };
 
 export const currentTopic = signal<Topic>(DEFAULT_TOPIC);
@@ -80,12 +79,12 @@ export class EfsShell extends SignalWatcher(LitElement) {
       flex: 1;
       padding: 1rem;
     }
-    
+
     wa-button.wallet-button {
       font-size: 0.8rem;
       font-weight: 400;
     }
-    
+
     wa-button.wallet-button::part(base) {
       padding: 0.35rem 0.7rem;
       border-radius: 0.3rem;
@@ -96,19 +95,19 @@ export class EfsShell extends SignalWatcher(LitElement) {
       transition: all 0.2s ease;
       font-weight: 400;
     }
-    
+
     wa-button.wallet-button::part(base):hover {
       background-color: rgba(0, 0, 0, 0.04);
       border-color: #adb5bd;
       color: #495057;
     }
-    
-    wa-button.wallet-button[data-connected="true"]::part(base) {
+
+    wa-button.wallet-button[data-connected='true']::part(base) {
       color: #0066cc;
       border-color: #b3d9ff;
     }
-    
-    wa-button.wallet-button[data-connected="true"]::part(base):hover {
+
+    wa-button.wallet-button[data-connected='true']::part(base):hover {
       background-color: rgba(0, 102, 204, 0.05);
       border-color: #0066cc;
     }
@@ -151,15 +150,19 @@ export class EfsShell extends SignalWatcher(LitElement) {
         <header class="header-bar">
           <efs-topic-breadcrumb></efs-topic-breadcrumb>
           <div>
-            <wa-switch ?checked=${this.isDarkScheme} @change=${this.#switchClick}>Dark mode</wa-switch>
-            <wa-button 
-              class="wallet-button" 
-              size="small" 
+            <wa-switch ?checked=${this.isDarkScheme} @change=${this.#switchClick}
+              >Dark mode</wa-switch
+            >
+            <wa-button
+              class="wallet-button"
+              size="small"
               variant="outline"
               data-connected=${walletAddress ? 'true' : 'false'}
               @click=${connectWallet}
             >
-              ${walletAddress ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}` : 'Connect Wallet'}
+              ${walletAddress
+                ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
+                : 'Connect Wallet'}
             </wa-button>
           </div>
         </header>
@@ -169,7 +172,7 @@ export class EfsShell extends SignalWatcher(LitElement) {
             <div>Topic Tree (navigation)</div>
             <efs-topic-tree></efs-topic-tree>
           </nav>
-          
+
           <div class="content-area">
             <header class="main-header">EFS Browser (main-header)</header>
             <main>

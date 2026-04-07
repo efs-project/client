@@ -10,10 +10,10 @@ import '@awesome.me/webawesome/dist/components/breadcrumb-item/breadcrumb-item.j
 @customElement('efs-topic-breadcrumb')
 export class EfsTopicBreadcrumb extends SignalWatcher(LitElement) {
   static styles = css`
-      wa-breadcrumb {
-        padding: 4px 0;
-      }
-    `;
+    wa-breadcrumb {
+      padding: 4px 0;
+    }
+  `;
 
   @state()
   private topicPath: Topic[] = [];
@@ -53,7 +53,7 @@ export class EfsTopicBreadcrumb extends SignalWatcher(LitElement) {
   handleTopicClick(topicUid: string) {
     console.log('Breadcrumb clicked for topic:', topicUid);
     if (Kernel.EFS && topicUid) {
-      Kernel.EFS.TopicStore.getById(topicUid).then(topic => {
+      Kernel.EFS.TopicStore.getById(topicUid).then((topic) => {
         if (topic) {
           currentTopic.set(topic);
         }
@@ -65,19 +65,20 @@ export class EfsTopicBreadcrumb extends SignalWatcher(LitElement) {
     const topic = currentTopic.get();
 
     return html`
-        <wa-breadcrumb>
-          <wa-breadcrumb-item @click=${() => this.handleTopicClick('root')}>EFS</wa-breadcrumb-item>
-          
-          ${this.topicPath.length > 0 ?
-        this.topicPath.map(pathTopic => html`
-              <wa-breadcrumb-item @click=${() => this.handleTopicClick(pathTopic.uid)}>
-                ${pathTopic.name}
-              </wa-breadcrumb-item>
-            `) :
-        html`<wa-breadcrumb-item>${topic.name}</wa-breadcrumb-item>`
-      }
-        </wa-breadcrumb>
-      `;
+      <wa-breadcrumb>
+        <wa-breadcrumb-item @click=${() => this.handleTopicClick('root')}>EFS</wa-breadcrumb-item>
+
+        ${this.topicPath.length > 0
+          ? this.topicPath.map(
+              (pathTopic) => html`
+                <wa-breadcrumb-item @click=${() => this.handleTopicClick(pathTopic.uid)}>
+                  ${pathTopic.name}
+                </wa-breadcrumb-item>
+              `,
+            )
+          : html`<wa-breadcrumb-item>${topic.name}</wa-breadcrumb-item>`}
+      </wa-breadcrumb>
+    `;
   }
 }
 

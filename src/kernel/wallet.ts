@@ -1,4 +1,13 @@
-import { createPublicClient, createWalletClient, custom, http, type WalletClient, type Chain, type Client, type Transport } from 'viem';
+import {
+  createPublicClient,
+  createWalletClient,
+  custom,
+  http,
+  type WalletClient,
+  type Chain,
+  type Client,
+  type Transport,
+} from 'viem';
 import { hardhat } from 'viem/chains';
 import { BrowserProvider, JsonRpcSigner, FallbackProvider, JsonRpcProvider } from 'ethers';
 import { signal } from '@lit-labs/signals';
@@ -23,30 +32,30 @@ const publicClient = createPublicClient({
  * @returns An ethers.js Signer.
  */
 export function walletClientToSigner(client: WalletClient): JsonRpcSigner {
-    const { account, chain, transport } = client;
-    // We use the non-null assertion operator (!) because we are certain the
-    // walletClient will have a chain and account when this is called.
-    const network = {
-      chainId: chain!.id,
-      name: chain!.name,
-      ensAddress: chain!.contracts?.ensRegistry?.address,
-    };
-    const provider = new BrowserProvider(transport, network);
-    const signer = new JsonRpcSigner(provider, account!.address);
-    return signer;
+  const { account, chain, transport } = client;
+  // We use the non-null assertion operator (!) because we are certain the
+  // walletClient will have a chain and account when this is called.
+  const network = {
+    chainId: chain!.id,
+    name: chain!.name,
+    ensAddress: chain!.contracts?.ensRegistry?.address,
+  };
+  const provider = new BrowserProvider(transport, network);
+  const signer = new JsonRpcSigner(provider, account!.address);
+  return signer;
 }
 
 // Function to connect the wallet
 export async function connectWallet() {
   if (!window.ethereum) {
-    alert("Please install a browser wallet like MetaMask.");
+    alert('Please install a browser wallet like MetaMask.');
     return;
   }
-  
+
   try {
     const walletClient = createWalletClient({
       chain: hardhat,
-      transport: custom(window.ethereum)
+      transport: custom(window.ethereum),
     });
 
     const [address] = await walletClient.requestAddresses();
@@ -56,7 +65,7 @@ export async function connectWallet() {
     const connectedWalletClient = createWalletClient({
       account: address,
       chain: hardhat,
-      transport: custom(window.ethereum)
+      transport: custom(window.ethereum),
     });
 
     const signerInstance = walletClientToSigner(connectedWalletClient);
@@ -64,9 +73,8 @@ export async function connectWallet() {
 
     const { Kernel } = await import('./kernel');
     Kernel.EFS.connect(signerInstance);
-
   } catch (error) {
-    console.error("Failed to connect wallet:", error);
+    console.error('Failed to connect wallet:', error);
     account.set(undefined);
     signer.set(undefined);
   }
@@ -79,21 +87,21 @@ export async function connectWallet() {
  * @returns An ethers.js Provider.
  */
 export function clientToProvider(client: Client<Transport, Chain>) {
-    const { chain, transport } = client
-    const network = {
-      chainId: chain.id,
-      name: chain.name,
-      ensAddress: chain.contracts?.ensRegistry?.address,
-    }
-    if (transport.type === 'fallback') {
-      const providers = (transport.transports as ReturnType<Transport>[]).map(
-        ({ value }) => new JsonRpcProvider(value?.url, network),
-      )
-      if (providers.length === 1) return providers[0]
-      return new FallbackProvider(providers)
-    }
-    return new JsonRpcProvider(transport.url, network)
+  const { chain, transport } = client;
+  const network = {
+    chainId: chain.id,
+    name: chain.name,
+    ensAddress: chain.contracts?.ensRegistry?.address,
+  };
+  if (transport.type === 'fallback') {
+    const providers = (transport.transports as ReturnType<Transport>[]).map(
+      ({ value }) => new JsonRpcProvider(value?.url, network),
+    );
+    if (providers.length === 1) return providers[0];
+    return new FallbackProvider(providers);
   }
+  return new JsonRpcProvider(transport.url, network);
+}
 
 const ethersProvider = clientToProvider(publicClient);
 
