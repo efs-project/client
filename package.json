@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "sync-abis": "node scripts/sync-abis.js"
   },
   "dependencies": {
     "@awesome.me/webawesome": "^3.1.0",

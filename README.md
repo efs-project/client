@@ -9,7 +9,17 @@ This project is in early development and takes some technical skill to set up an
 npm install
 ```
 
-### 2. Run Development Server
+### 2. Setup External Contracts
+This client relies on the separated `contracts` repository for ABIs and testnet logic.
+1. Clone the external EFS Contracts repository.
+2. In the contracts repo, run `yarn fork` and then in a new terminal `yarn deploy`.
+3. Back in this client repo, sync the freshly-deployed local contract ABIs:
+```bash
+npm run sync-abis
+```
+*(By default, this looks for an adjacent `../contracts/` folder. If your contracts are elsewhere, use `EFS_CONTRACTS_PATH=/path npm run sync-abis`).*
+
+### 3. Run Development Server
 ```bash
 npm run dev
 ```
