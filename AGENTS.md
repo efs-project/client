@@ -1,30 +1,44 @@
 # AGENTS.md
 
-EFS production web client. Vite + Lit. This is the public-facing client (cf. `packages/nextjs/` in `efs-project/contracts`, which is a Scaffold-ETH-based debug UI — not this).
+EFS legacy v1 web client. Vite + Lit.
 
-> **Outdated.** This repo lags `efs-project/contracts` and the planning vault. Don't assume documentation here reflects current EFS state until you've verified against `contracts/specs/` and the planning vault's `Designs/`. A modernization pass is on the cross-repo Backlog.
+> **Repository status (2026-07-23): reference implementation, not the Client v2
+> target.** This code predates the from-scratch EFS v2 redesign and lags the
+> deployed v1 contracts. Do not start new product architecture or assume this
+> repository will be evolved in place until the Client v2 design chooses an
+> implementation target.
+
+The active Client v2 design set is:
+https://github.com/efs-project/planning/tree/main/Designs/clientv2
+
+The active protocol redesign is:
+https://github.com/efs-project/planning/tree/main/Designs/efsv2
 
 ## Read on init
 
-- [`CLAUDE.md`](./CLAUDE.md) — repo-local architecture and command guide (Claude Code auto-loads this; other agents should read it).
-- [`README.md`](./README.md)
-- [`design.md`](./design.md) — historical, may be stale; cross-check before relying on it.
+- [`CLAUDE.md`](./CLAUDE.md) — how the legacy v1 client is structured and run.
+- [`README.md`](./README.md) — legacy setup.
+- [`design.md`](./design.md) — historical architecture sketch.
 
-## Cross-repo coordination — the planning vault
+Read those files to understand this code, not to infer the v2 product model.
 
-EFS uses a separate **planning vault** as the cross-repo coordination point across this repo, the contracts repo, and the future SDK. Repo: [efs-project/planning](https://github.com/efs-project/planning); target layout `/efs/{contracts,client,sdk,planning}/`.
+## Repository boundaries
 
-The vault holds:
+- `client/` is the old Vite/Lit browser client.
+- `contracts/packages/nextjs/` is the newer v1 explorer and debug UI.
+- `planning/Designs/clientv2/` is the current product and OS architecture work.
+- `sdk/` contains an unmerged pre-v2 SDK implementation. It is legacy input,
+  not the API contract for Client v2.
 
-- Cross-repo designs with a name-first → numbered-at-promotion lifecycle.
-- Cross-repo Kanban board, milestones (notably **OnionDAO hackathon 2026-06-01**), and decisions log.
-- Glossary of cross-cutting EFS terms.
-- Onboarding for AI agents (start-here, conventions, escalation).
+For deployed v1 on-chain behavior, `contracts/specs/` and
+`contracts/docs/adr/` are authoritative. For v2 architecture and prioritization,
+the planning vault is authoritative.
 
-Read the vault's [`AGENTS.md`](https://github.com/efs-project/planning/blob/main/AGENTS.md) for cross-repo tasks. Client-only tasks: this repo's docs are sufficient.
+## Working here
 
-## Sibling repos
-
-- [`efs-project/contracts`](https://github.com/efs-project/contracts) — Solidity contracts, ADRs, system specs. Authoritative for on-chain behavior.
-- [`efs-project/planning`](https://github.com/efs-project/planning) — cross-repo coordination vault.
-- `efs-project/sdk` (future) — on-chain + off-chain SDK packages, will replace ad-hoc EAS interactions in this client when it lands.
+- Preserve IPFS-compatible relative assets.
+- Treat hardcoded Sepolia addresses, EAS assumptions, topic-tree semantics, and
+  direct SDK usage as v1-specific.
+- Do not retrofit v2 decisions into this repository piecemeal. Wait for an
+  explicit implementation plan or a narrowly scoped maintenance request.
+- If a task spans repos, read the planning vault's `AGENTS.md` first.

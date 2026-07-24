@@ -1,5 +1,9 @@
 # Ethereum File System Client
 
+> **Legacy v1 client.** This repository is retained as implementation evidence
+> during the EFS v2 redesign. It is not the current Client v2 architecture or an
+> approved base for new v2 work.
+
 This project is in early development and takes some technical skill to set up and use.
 
 ## Getting Started

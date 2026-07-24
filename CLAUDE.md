@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+> **Legacy v1 architecture.** This file describes the code that exists here; it
+> does not describe the from-scratch EFS v2 or Client v2 target. Read
+> `AGENTS.md` before acting and use the planning vault for current architecture.
+
 ## Commands
 
 ```bash

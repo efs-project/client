@@ -1,5 +1,8 @@
 # Ethereum File System (EFS)
 
+> **Historical v1 sketch.** The active Client v2 architecture lives in the
+> planning repository under `Designs/clientv2/`.
+
 This document lays out the components and high level functions
 
 ## Components
